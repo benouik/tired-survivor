@@ -1,0 +1,9 @@
+[gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://d7oua3pvvoo6"]
+
+[ext_resource type="FontFile" uid="uid://mr8rj1qr1nuo" path="res://Fonts/andina.ttf" id="1_tppt4"]
+
+[resource]
+font = ExtResource("1_tppt4")
+font_size = 8
+outline_size = 16
+outline_color = Color(0.054902, 0.309804, 0.309804, 1)

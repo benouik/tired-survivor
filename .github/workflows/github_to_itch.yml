@@ -1,0 +1,231 @@
+name: Publish Farming to Itch.io
+
+on:
+ push:
+  branches:
+  - main
+ pull_request:
+  branches:
+  - main
+env:
+#  BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }} # Needs to be added through github
+ DISCORD_WEBHOOK: ${{secrets.DISCORD_WEBHOOK}} # Needs to be added through github
+ GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+ IS_MAIN: ${{ contains(github.ref, 'main') }}
+ PROJECT_NAME: "Farming"
+
+jobs:
+ CleanArtifacts:
+  # This job clears out the previous artifacts made so you don't run out of space in your github account
+  runs-on: ubuntu-latest
+  permissions: write-all
+  steps:
+  - uses: kolpav/purge-artifacts-action@v1
+    with:
+     token: ${{ secrets.GITHUB_TOKEN }}
+     expire-in: 1hr
+
+ Export:
+  needs: CleanArtifacts # wait for artifacts to clean before making a new one
+  runs-on: ubuntu-latest
+  permissions: write-all
+  steps:
+  - uses: actions/checkout@v2
+
+  - name: Create Godot Exec Path
+    run: |
+       mkdir -p godot_exec
+
+  - name: Cache Godot Exec
+    id: cache-godot
+    uses: actions/cache@v4
+    with:
+      path: godot-exec
+      key: godot-exec_${{ hashFiles('godot_exec') }}
+
+
+  - name: Download + Authorize Godot
+    if: steps.cache-godot.outputs.cache-hit != 'true'
+    run: |
+       curl -L -o godot.zip https://downloads.tuxfamily.org/godotengine/4.2.2/Godot_v4.2.2-stable_linux.x86_64.zip
+       unzip godot.zip
+       mv Godot_v4.2.2-stable_linux.x86_64 godot_exec/godot
+       ls
+       chmod +x godot_exec/godot
+
+  - name: Cache Godot Exec
+    id: cache-godot2
+    uses: actions/cache@v4
+    with:
+      path: godot-exec
+      key: godot-exec_${{ hashFiles('godot_exec') }}
+
+  - name: Create Templates Path
+    run: |
+       mkdir -p ~/.local/share/godot/export_templates/4.2.2.stable
+
+  - name: Cache Build Tools
+    id: cache-templates
+    uses: actions/cache@v4
+    with:
+      path: ~/.local/share/godot/export_templates/4.2.2.stable
+      key: web_release_${{ hashFiles('~/.local/share/godot/export_templates/4.2.2.stable') }}
+
+  - name: Install Export Templates
+    if: steps.cache-templates.outputs.cache-hit != 'true'
+    run: |
+     if [ -e "~/.local/share/godot/export_templates/4.2.2.stable/web_release.zip" ]; then
+     echo 'File already exists' >&2
+     else
+     curl -L -o export_templates.zip https://downloads.tuxfamily.org/godotengine/4.2.2/Godot_v4.2.2-stable_export_templates.tpz
+     unzip export_templates.zip
+     mv ./templates/* ~/.local/share/godot/export_templates/4.2.2.stable
+     fi
+
+  - name: Cache Build Tools
+    id: cache-templates2
+    uses: actions/cache@v4
+    with:
+      path: ~/.local/share/godot/export_templates/4.2.2.stable
+      key: web_release_${{ hashFiles('~/.local/share/godot/export_templates/4.2.2.stable') }}
+
+  - name: Export
+    run: |
+     mkdir -p build/{html5, windows, linux}
+     ./godot_exec/godot --headless --path ./ --export-release "Web"
+     ./godot_exec/godot --headless --path ./ --export-release "Windows Desktop"
+     ./godot_exec/godot --headless --path ./ --export-release "Linux/X11"
+    #  zip -rm build/html5/index.zip build/html5
+    #  zip -rm build/windows/tired-farmer_win.zip build/windows
+    #  zip -rm build/linux/tired-farmer_linux.zip build/linux
+
+
+
+  - uses: actions/upload-artifact@v4
+    with:
+     name: build
+     path: build
+  # - uses: actions/upload-artifact@v2
+  #   with:
+  #    name: linux
+  #    path: build/linux
+  # - uses: actions/upload-artifact@v2
+  #   with:
+  #    name: windows
+  #    path: build/windows
+  
+ Release:
+  needs: Export
+  if: ${{ contains(github.ref, 'main') }}
+  runs-on: ubuntu-latest
+  permissions: write-all
+  steps:
+   - uses: actions/checkout@v2
+   
+  #  - name: Version
+  #    id: tag_version
+  #    uses: mathieudutour/github-tag-action@v5.6
+  #    with:
+  #     github_token: ${{ secrets.GITHUB_TOKEN }}
+    
+  #  - name: Verify Tag
+  #    if: ${{ !steps.tag_version.outputs.new_tag }}
+  #    run: exit 1
+    
+   - name: Download Exports
+     uses: actions/download-artifact@v4
+     with:
+      name: build
+      path: build
+    
+   - name: Zip
+     run: |
+      cd build/html5
+      zip -r ../../release_html5-${{ github.event.head_commit.message }}.zip *
+      cd ../../build/windows
+      zip -r ../../release_windows-${{ github.event.head_commit.message }}.zip *
+      cd ../../build/linux
+      zip -r ../../release_linux-${{ github.event.head_commit.message }}.zip *
+
+   - name: Create Github Release
+     id: create_release
+     uses: actions/create-release@v1
+     env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+     with:
+      tag_name: ${{ github.event.head_commit.message }}
+      release_name: Release_${{ github.event.head_commit.message }}
+    
+   - name: Upload Release Artifact Html
+     uses: actions/upload-release-asset@v1
+     env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+     with:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+      asset_path: ./release_html5-${{ github.event.head_commit.message }}.zip
+      asset_name: html5_${{ github.event.head_commit.message }}.zip
+      asset_content_type: application/zip
+
+   - name: Upload Release Artifact Windows
+     uses: actions/upload-release-asset@v1
+     env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+     with:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+      asset_path: ./release_windows-${{ github.event.head_commit.message }}.zip
+      asset_name: windows_${{ github.event.head_commit.message }}.zip
+      asset_content_type: application/zip
+
+   - name: Upload Release Artifact Linux
+     uses: actions/upload-release-asset@v1
+     env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+     with:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+      asset_path: ./release_linux-${{ github.event.head_commit.message }}.zip
+      asset_name: linux_${{ github.event.head_commit.message }}.zip
+      asset_content_type: application/zip
+
+   - uses: frdrwrt/write-to-file@v1.3
+     with:
+      filepath: ./VERSION.txt
+      content: ${{ steps.tag_version.outputs.new_version }}
+      mode: 0655
+    
+   - uses: actions/upload-artifact@v4
+     with:
+      name: html_build
+      path: build/html5
+
+ 
+ Publish:
+  needs: Release
+  if: ${{ contains(github.ref, 'main') }}
+  runs-on: ubuntu-latest
+  environment: env
+  steps:
+   - uses: actions/download-artifact@v4
+     with:
+      name: html_build
+      path: build/html5
+
+   - shell: bash
+     env:
+       BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+     run: |
+       curl -L -o butler.zip https://broth.itch.ovh/butler/linux-amd64/LATEST/archive/default
+       unzip butler.zip
+       chmod +x butler
+       ./butler push build/html5 turbob/tired-farmer:html5 
+  
+  # - name: Login To Butler
+      # run: ./butler login
+    
+
+ Cleanup:
+  needs: [Export, Release, Publish]
+  runs-on: ubuntu-latest
+  steps:
+   - uses: geekyeggo/delete-artifact@v1
+     with:
+      name: VERSION

@@ -1,0 +1,40 @@
+[gd_scene load_steps=6 format=3 uid="uid://dqvcjkwbwadtw"]
+
+[ext_resource type="Texture2D" uid="uid://c8b84pk0a1ipf" path="res://Sprites/Feu.png" id="1_sv2ru"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8ii3e"]
+atlas = ExtResource("1_sv2ru")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_agpsq"]
+atlas = ExtResource("1_sv2ru")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mukbb"]
+atlas = ExtResource("1_sv2ru")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_dtmof"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8ii3e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_agpsq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mukbb")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="FeuDeCamp" type="Node2D"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(16, 12)
+sprite_frames = SubResource("SpriteFrames_dtmof")
+autoplay = "default"
+frame_progress = 0.610632

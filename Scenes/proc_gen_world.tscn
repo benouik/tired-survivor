@@ -1,0 +1,62 @@
+[gd_scene load_steps=9 format=3 uid="uid://dcyb7h6nubfok"]
+
+[ext_resource type="Script" path="res://Scripts/proc_gen_world.gd" id="1_aj1ci"]
+[ext_resource type="TileSet" uid="uid://dv6b72226ukkx" path="res://Data/tileset.tres" id="1_bi7v1"]
+[ext_resource type="PackedScene" uid="uid://c6gt07b2inb81" path="res://Scenes/player.tscn" id="3_ecxj2"]
+[ext_resource type="PackedScene" uid="uid://dqvcjkwbwadtw" path="res://Scenes/feu_de_camp.tscn" id="3_i40rv"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_fp7k5"]
+seed = 123
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_00df7"]
+noise = SubResource("FastNoiseLite_fp7k5")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_3juo6"]
+frequency = 0.35
+fractal_octaves = 1
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_87rhm"]
+noise = SubResource("FastNoiseLite_3juo6")
+
+[node name="proc_gen_world" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_aj1ci")
+noise_height_text = SubResource("NoiseTexture2D_00df7")
+noise_tree_text = SubResource("NoiseTexture2D_87rhm")
+player_scene = ExtResource("3_ecxj2")
+feu_de_camp_scene = ExtResource("3_i40rv")
+
+[node name="TileMap" type="TileMap" parent="."]
+y_sort_enabled = true
+tile_set = ExtResource("1_bi7v1")
+format = 2
+layer_0/name = "water"
+layer_0/z_index = -1
+layer_1/name = "ground_1"
+layer_1/z_index = -1
+layer_1/tile_data = PackedInt32Array()
+layer_2/name = "ground_2"
+layer_2/z_index = -1
+layer_2/tile_data = PackedInt32Array()
+layer_3/name = "cliff"
+layer_3/tile_data = PackedInt32Array()
+layer_4/name = "env"
+layer_4/y_sort_enabled = true
+layer_4/z_index = 1
+layer_4/tile_data = PackedInt32Array()
+layer_5/name = "curseur"
+layer_5/z_index = 10
+layer_5/tile_data = PackedInt32Array()
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ProgressBar" type="ProgressBar" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 26.0
+offset_top = 675.0
+offset_right = -1092.0
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 2
