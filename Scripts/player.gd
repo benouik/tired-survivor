@@ -17,6 +17,7 @@ var aim_pos: Vector2
 
 var sur_batterie:bool = false
 
+@onready var interaction_ui = $InteractionUI
 @onready var animations = $AnimationPlayer
 
 signal coin(pos, dir)
@@ -112,7 +113,8 @@ func set_shader_intensity(value: float):
 	$Sprite2D.material.set_shader_parameter("intensity", value)
 
 func _ready():
-	pass
+	# Set this node as the Player node
+	Global.set_player_reference(self)
 	#Globals.connect("alarm_triggered", on_connerie)
 	#$"../../CanvasLayer2/Control/Label".text = str(nrj)
 #func on_connerie():

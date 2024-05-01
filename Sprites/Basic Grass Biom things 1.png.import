@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://i7pbhpdc3f6t"
-path="res://.godot/imported/survivor.png-b8f9111f56ac7e13743c73d107d16dde.ctex"
+uid="uid://dk6daufy767n5"
+path="res://.godot/imported/Basic Grass Biom things 1.png-3a350d838727a04424907d6834cef585.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Scenes/survivor.png"
-dest_files=["res://.godot/imported/survivor.png-b8f9111f56ac7e13743c73d107d16dde.ctex"]
+source_file="res://Sprites/Basic Grass Biom things 1.png"
+dest_files=["res://.godot/imported/Basic Grass Biom things 1.png-3a350d838727a04424907d6834cef585.ctex"]
 
 [params]
 

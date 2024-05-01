@@ -30,7 +30,7 @@ jobs:
   runs-on: ubuntu-latest
   permissions: write-all
   steps:
-  - uses: actions/checkout@v2
+  - uses: actions/checkout@v4
 
   - name: Create Godot Exec Path
     run: |
@@ -120,7 +120,7 @@ jobs:
   runs-on: ubuntu-latest
   permissions: write-all
   steps:
-   - uses: actions/checkout@v2
+   - uses: actions/checkout@v4
    
   #  - name: Version
   #    id: tag_version
@@ -149,7 +149,7 @@ jobs:
 
    - name: Create Github Release
      id: create_release
-     uses: actions/create-release@v1
+     uses: actions/create-release@v1.1.4
      env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
      with:
@@ -157,7 +157,7 @@ jobs:
       release_name: Release_${{ github.event.head_commit.message }}
     
    - name: Upload Release Artifact Html
-     uses: actions/upload-release-asset@v1
+     uses: actions/upload-release-asset@v1.0.2
      env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
      with:
@@ -167,7 +167,7 @@ jobs:
       asset_content_type: application/zip
 
    - name: Upload Release Artifact Windows
-     uses: actions/upload-release-asset@v1
+     uses: actions/upload-release-asset@v1.0.2
      env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
      with:
@@ -177,7 +177,7 @@ jobs:
       asset_content_type: application/zip
 
    - name: Upload Release Artifact Linux
-     uses: actions/upload-release-asset@v1
+     uses: actions/upload-release-asset@v1.0.2
      env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
      with:

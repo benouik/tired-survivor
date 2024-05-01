@@ -6,6 +6,8 @@ extends Node2D
 @export var player_scene: PackedScene
 @export var feu_de_camp_scene: PackedScene
 
+@export var fruit_scene: PackedScene
+
 var noise: Noise
 var tree_noise: Noise
 
@@ -167,12 +169,17 @@ func _input(_event):
 		
 	if Input.is_action_just_pressed("click") and cursor_active:
 		
+
+		
 		var mouse_pos :Vector2 = get_global_mouse_position()
 		var tile_mouse_pos :Vector2i = tile_map.local_to_map(mouse_pos)
 
 		var env_present = tile_map.get_cell_tile_data(env_layer, tile_mouse_pos)
 		
-		if env_present and retrieving_custom_data(tile_mouse_pos, can_be_cut_custom_data, env_layer):
+		if Global.item_to_pickup != Node2D:
+			Global.item_to_pickup.pickup_item()
+			
+		elif env_present and retrieving_custom_data(tile_mouse_pos, can_be_cut_custom_data, env_layer):
 			if tile_mouse_pos in damaged_trees.keys():
 				damaged_trees[tile_mouse_pos] -= 10
 			else:
@@ -222,9 +229,13 @@ func handle_seed(tile_mouse_pos, level, atlas_coord, final_seed_level):
 	var source_id :int = 0
 	tile_map.set_cell(env_layer, tile_mouse_pos, source_id, atlas_coord)
 	
-	await get_tree().create_timer(5.0).timeout
+	await get_tree().create_timer(1.0).timeout
 	
-	if level == final_seed_level:
+	if level == final_seed_level -1:
+		tile_map.erase_cell(env_layer, tile_mouse_pos)
+		var fruit = fruit_scene.instantiate()
+		fruit.position = Vector2(tile_mouse_pos.x *16+8, tile_mouse_pos.y *16+8)
+		add_child(fruit)
 		return
 		
 	else:
