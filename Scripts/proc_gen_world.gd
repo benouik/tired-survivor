@@ -73,9 +73,9 @@ func _ready():
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	var source_id = 1
-	var atlas
+func _process(_delta):
+	source_id = 1
+	#var atlas
 	var mouse_pos :Vector2 = get_global_mouse_position()
 	var tile_mouse_pos :Vector2i = tile_map.local_to_map(mouse_pos)
 	
@@ -96,7 +96,7 @@ func _process(delta):
 		
 	if cursor_active:
 		tile_map.set_cell(cursor_layer, tile_mouse_pos, source_id, cursor_atlas)
-		var can_dirt = check_ground_layer_custom_data(tile_mouse_pos, can_place_dirt_custom_data)
+		#var can_dirt = check_ground_layer_custom_data(tile_mouse_pos, can_place_dirt_custom_data)
 		
 		#if int(delta) % 60 == 0:
 			#print("Dirt: ", can_dirt)
@@ -241,7 +241,7 @@ func retrieving_custom_data(tile_mouse_pos, custom_data_layer, layer):
 
 
 func handle_seed(tile_mouse_pos, level, atlas_coord, final_seed_level):
-	var source_id :int = 0
+	source_id = 0
 	tile_map.set_cell(env_layer, tile_mouse_pos, source_id, atlas_coord)
 	
 	await get_tree().create_timer(1.0).timeout

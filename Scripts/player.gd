@@ -17,7 +17,7 @@ var aim_pos: Vector2
 
 var sur_batterie:bool = false
 
-@onready var interaction_ui = $InteractionUI
+#@onready var interaction_ui = $InteractionUI
 @onready var animations = $AnimationPlayer
 
 signal coin(pos, dir)
@@ -307,7 +307,7 @@ func _on_home_area_exited(_area):
 	sur_batterie = true
 
 
-func _on_home_body_entered(body):
+func _on_home_body_entered(_body):
 	print("Revenu")
 	sur_batterie = false
 	$TimerFatigue.stop()
@@ -316,7 +316,7 @@ func _on_home_body_entered(body):
 	$"../../CanvasLayer2/Control/Label".text = str(nrj)
 
 
-func _on_home_body_exited(body):
+func _on_home_body_exited(_body):
 	print("Sorti")
 	$TimerFatigue.wait_time = nrj
 	$TimerFatigue.start()
