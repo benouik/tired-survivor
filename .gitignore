@@ -1,2 +1,4 @@
 # Godot 4+ specific ignores
 .godot/
+bfg-1.14.0
+build_and_export.ps1
