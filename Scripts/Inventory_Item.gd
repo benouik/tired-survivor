@@ -19,6 +19,7 @@ func _ready():
 	# Set the texture to reflect in the game
 	if not Engine.is_editor_hint():
 		icon_sprite.texture = item_texture
+	item_name = ["Fraise", "Melon", "Cerise"].pick_random()
 
 func _process(_delta):
 	# Set the texture to reflect in the editor
@@ -27,6 +28,7 @@ func _process(_delta):
 
 # Add item to inventory
 func pickup_item():
+	
 	var item = {
 		"quantity": 1,
 		"type": item_type,
@@ -38,7 +40,11 @@ func pickup_item():
 	if Global.player_node:
 		Global.add_item(item)
 		self.queue_free()
-		Global.item_to_pickup = Node2D
+		if Global.item_to_pickup == self:
+			Global.item_to_pickup = Node2D
+			Global.interaction_ui.visible = false
+			Global.interaction_label.visible = false
+		
 
 # If player is in range, show UI and make item pickable
 func _on_area_2d_body_entered(body):
@@ -55,10 +61,14 @@ func _on_area_2d_body_exited(body):
 
 func _on_area_2d_mouse_entered():
 		player_in_range = true
-		$"../Player/InteractionUI".visible = true
+		Global.interaction_ui.visible = true
+		Global.interaction_label.visible = true
+		Global.interaction_label.text = self.item_name
 		Global.item_to_pickup = self
 
 func _on_area_2d_mouse_exited():
 		player_in_range = false
-		$"../Player/InteractionUI".visible = false
-		Global.item_to_pickup = Node2D
+		if Global.item_to_pickup == self:
+			Global.interaction_ui.visible = false
+			Global.interaction_label.visible = false
+			Global.item_to_pickup = Node2D

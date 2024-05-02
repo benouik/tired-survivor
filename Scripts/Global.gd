@@ -4,6 +4,8 @@ extends Node
 
 # Scene and node references
 var player_node: Node = null
+var interaction_ui: ColorRect = null
+var interaction_label: Label = null
 
 # Inventory items
 var inventory = []
@@ -17,10 +19,19 @@ func _ready():
 	# Initializes the inventory with 30 slots (spread over 9 blocks per row)
 	inventory.resize(30) 
 	
+	
+func set_interaction_ui_reference(ui, label):
+	interaction_ui = ui
+	interaction_label = label
+
 # Sets the player reference for inventory interactions
 func set_player_reference(player):
 	player_node = player
 	
+	#var node = str(player_node.get_path()) + "/InteractionUI"
+	#interaction_ui = get_node(node)
+	#print(interaction_ui)
+
 # Adds an item to the inventory, returns true if successful
 func add_item(item):
 	for i in range(inventory.size()):

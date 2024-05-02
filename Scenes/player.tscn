@@ -364,21 +364,6 @@ polygon = PackedVector2Array(2, 2, 3, 0, 2, -2, 0, -3, -2, -2, -3, 0, -2, 2, 0, 
 [node name="TimerEtrangle" type="Timer" parent="."]
 one_shot = true
 
-[node name="InteractionUI" type="ColorRect" parent="."]
-visible = false
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 1046.0
-offset_top = 670.0
-offset_right = 1278.0
-offset_bottom = 715.0
-grow_horizontal = 0
-grow_vertical = 0
-color = Color(0, 0.470588, 0.376471, 1)
-
 [connection signal="timeout" from="TimerCoinCooldown" to="." method="_on_timer_coin_cooldown_timeout"]
 [connection signal="timeout" from="TimerDeath" to="." method="_on_timer_death_timeout"]
 [connection signal="timeout" from="TimerGrenadeCooldown" to="." method="_on_timer_grenade_cooldown_timeout"]

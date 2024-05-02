@@ -11,6 +11,7 @@ extends Node2D
 var noise: Noise
 var tree_noise: Noise
 
+var last_action = ""
 var noise_values = []
 
 @onready var tile_map :TileMap = $TileMap
@@ -67,6 +68,7 @@ var damaged_trees = {}
 func _ready():
 	noise = noise_height_text.noise
 	tree_noise = noise_tree_text.noise
+	Global.set_interaction_ui_reference($CanvasLayer/InteractionUI, $CanvasLayer/InteractionLabel) 
 	generate_world()
 
 
@@ -96,8 +98,8 @@ func _process(delta):
 		tile_map.set_cell(cursor_layer, tile_mouse_pos, source_id, cursor_atlas)
 		var can_dirt = check_ground_layer_custom_data(tile_mouse_pos, can_place_dirt_custom_data)
 		
-		if int(delta) % 60 == 0:
-			print("Dirt: ", can_dirt)
+		#if int(delta) % 60 == 0:
+			#print("Dirt: ", can_dirt)
 			
 		old_cursor_pos = tile_mouse_pos
 		
@@ -162,12 +164,16 @@ func generate_world():
 func _input(_event):
 	if Input.is_action_just_pressed("toggle_dirt"):
 		farming_mode_state = FARMING_MODES.DIRT
-		print("dirt")
+		#print("dirt")
 	if Input.is_action_just_pressed("toggle_seeds"):
-		print("seeds")
+		#print("seeds")
 		farming_mode_state = FARMING_MODES.SEEDS
 		
-	if Input.is_action_just_pressed("click") and cursor_active:
+	if Input.is_action_just_released("click"):
+		last_action = ""
+		print("none")
+		
+	if Input.is_action_pressed("click") and cursor_active:
 		
 
 		
@@ -176,8 +182,9 @@ func _input(_event):
 
 		var env_present = tile_map.get_cell_tile_data(env_layer, tile_mouse_pos)
 		
-		if Global.item_to_pickup != Node2D:
+		if Global.item_to_pickup != Node2D and last_action == "":
 			Global.item_to_pickup.pickup_item()
+			last_action = "pick"
 			
 		elif env_present and retrieving_custom_data(tile_mouse_pos, can_be_cut_custom_data, env_layer):
 			if tile_mouse_pos in damaged_trees.keys():
@@ -202,18 +209,26 @@ func _input(_event):
 			
 			
 			
-			elif farming_mode_state == FARMING_MODES.SEEDS and not env_present:
-				var atlas_coord = Vector2i(11, 1)
-				if retrieving_custom_data(tile_mouse_pos, can_place_seeds_custom_data, ground_1_layer):
-					var level :int = 0
-					var final_seed_level :int = 3
-					handle_seed(tile_mouse_pos, level, atlas_coord, final_seed_level)
+			elif farming_mode_state == FARMING_MODES.SEEDS and not env_present and Global.item_to_pickup == Node2D:
+				if last_action == "seeds" or last_action == "":
+					last_action = "seeds"
+					print("seeds")
 					
-			elif farming_mode_state == FARMING_MODES.DIRT and not env_present:
-				if retrieving_custom_data(tile_mouse_pos, can_place_dirt_custom_data, ground_1_layer):
-					dirt_tiles.append(tile_mouse_pos)
-					tile_map.erase_cell(ground_2_layer, tile_mouse_pos)
-					tile_map.set_cells_terrain_connect(ground_1_layer, dirt_tiles, 2, 0)
+					var atlas_coord = Vector2i(11, 1)
+					if retrieving_custom_data(tile_mouse_pos, can_place_seeds_custom_data, ground_1_layer):
+						var level :int = 0
+						var final_seed_level :int = 3
+						handle_seed(tile_mouse_pos, level, atlas_coord, final_seed_level)
+					
+			elif farming_mode_state == FARMING_MODES.DIRT and not env_present and Global.item_to_pickup == Node2D:
+				if last_action == "dirt" or last_action == "":
+					last_action = "dirt"
+					print("dirt")
+					
+					if retrieving_custom_data(tile_mouse_pos, can_place_dirt_custom_data, ground_1_layer):
+						dirt_tiles.append(tile_mouse_pos)
+						tile_map.erase_cell(ground_2_layer, tile_mouse_pos)
+						tile_map.set_cells_terrain_connect(ground_1_layer, dirt_tiles, 2, 0)
 	#print("Max: ", noise_values.max(), "  Min: ", noise_values.min())
 	
 	
