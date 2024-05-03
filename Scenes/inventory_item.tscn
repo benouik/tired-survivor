@@ -1,20 +1,22 @@
 [gd_scene load_steps=5 format=3 uid="uid://clbgps325bj3y"]
 
 [ext_resource type="Script" path="res://Scripts/Inventory_Item.gd" id="1_do300"]
-[ext_resource type="Texture2D" uid="uid://cflhlnpe2ylw5" path="res://Assets/16x16/CL_Crops_Mining.png" id="2_8k7ke"]
+[ext_resource type="Texture2D" uid="uid://kpdwqx48vf13" path="res://Sprites/carottes.png" id="2_la0u7"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_uv6ax"]
-atlas = ExtResource("2_8k7ke")
-region = Rect2(400, 160, 16, 32)
+[sub_resource type="AtlasTexture" id="AtlasTexture_a77fc"]
+resource_local_to_scene = true
+atlas = ExtResource("2_la0u7")
+region = Rect2(16, 0, 16, 16)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qxf2f"]
 size = Vector2(16, 16)
 
-[node name="InventoryItem" type="Node2D"]
+[node name="InventoryItem" type="Node2D" groups=["ramassable", "seeds"]]
+position = Vector2(0, 16)
 script = ExtResource("1_do300")
 item_type = "fruit"
 item_name = "Cerise"
-item_texture = SubResource("AtlasTexture_uv6ax")
+item_texture = SubResource("AtlasTexture_a77fc")
 item_effect = "health"
 
 [node name="Area2D" type="Area2D" parent="."]
@@ -22,12 +24,14 @@ collision_layer = 4
 collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+scale = Vector2(0.8, 0.8)
 shape = SubResource("RectangleShape2D_qxf2f")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = SubResource("AtlasTexture_uv6ax")
+texture = SubResource("AtlasTexture_a77fc")
 offset = Vector2(0, -8)
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]
 [connection signal="mouse_entered" from="Area2D" to="." method="_on_area_2d_mouse_entered"]
 [connection signal="mouse_exited" from="Area2D" to="." method="_on_area_2d_mouse_exited"]

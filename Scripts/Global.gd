@@ -7,19 +7,33 @@ var player_node: Node = null
 var interaction_ui: ColorRect = null
 var interaction_label: Label = null
 
+var cursor_active: bool = false
+var tile_map: TileMap
 # Inventory items
 var inventory = []
-
+var can_plante: bool = true
 # Custom signals
 signal inventory_updated
 
 var item_to_pickup = Node2D
+var world: Node2D
 
 func _ready(): 
 	# Initializes the inventory with 30 slots (spread over 9 blocks per row)
 	inventory.resize(30) 
 	
+func remove_seed_tile_at_cursor():
+	var mouse_pos :Vector2 = world.get_global_mouse_position()
+	var tile_mouse_pos :Vector2i = tile_map.local_to_map(mouse_pos)
+	tile_map.erase_cell(world.interaction_layer , tile_mouse_pos)
 	
+	
+func set_tile_map(map):
+	tile_map = map
+	
+func set_world(wrld):
+	world = wrld
+
 func set_interaction_ui_reference(ui, label):
 	interaction_ui = ui
 	interaction_label = label

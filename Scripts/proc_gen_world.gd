@@ -90,6 +90,8 @@ func _ready():
 	tree_noise = noise_tree_text.noise
 	flower_noise = noise_flower_text.noise
 	Global.set_interaction_ui_reference($CanvasLayer/InteractionUI, $CanvasLayer/InteractionLabel) 
+	Global.set_tile_map($TileMap2)
+	Global.set_world(self)
 	generate_world()
 
 
@@ -107,10 +109,13 @@ func _process(_delta):
 	if tile_mouse_pos.x >= tile_player_pos.x -1 and tile_mouse_pos.x <= tile_player_pos.x +1:
 		if tile_mouse_pos.y >= tile_player_pos.y -1 and tile_mouse_pos.y <= tile_player_pos.y +1:
 			cursor_active = true
+			Global.cursor_active = true
 		else:
 			cursor_active = false
+			Global.cursor_active = false
 	else:
 			cursor_active = false
+			Global.cursor_active = false
 	
 	if tile_mouse_pos != old_cursor_pos:
 		tile_map.erase_cell(cursor_layer, old_cursor_pos)
@@ -241,9 +246,9 @@ func _input(_event):
 
 		var interaction_present = tile_map.get_cell_tile_data(interaction_layer, tile_mouse_pos)
 		
-		if Global.item_to_pickup != Node2D and last_action == "":
-			Global.item_to_pickup.pickup_item()
-			last_action = "pick"
+		#if Global.item_to_pickup != Node2D and last_action == "":
+			#Global.item_to_pickup.pickup_item()
+			#last_action = "pick"
 			
 		#elif interaction_layer and retrieving_custom_data(tile_mouse_pos, can_be_cut_custom_data, interaction_layer):
 			#if tile_mouse_pos in damaged_trees.keys():
@@ -254,7 +259,7 @@ func _input(_event):
 				#tile_map.erase_cell(interaction_layer, tile_mouse_pos)
 				
 
-		elif not campement_placed and not interaction_layer:
+		if not campement_placed and not interaction_layer:
 			var feu_de_camp = feu_de_camp_scene.instantiate()
 			feu_de_camp.position = Vector2(tile_mouse_pos.x *16-8, tile_mouse_pos.y *16-8)
 			add_child(feu_de_camp)
@@ -299,23 +304,32 @@ func retrieving_custom_data(tile_mouse_pos, custom_data_layer, layer):
 		return false
 
 
+
+func handle_seed2(tile_mouse_pos, level, atlas_coords, final_seed_level):
+	pass
+
 func handle_seed(tile_mouse_pos, level, atlas_coords, final_seed_level):
-	source_id = 2
-	tile_map.set_cell(interaction_layer, tile_mouse_pos, source_id, atlas_coords[level])
-	
-	await get_tree().create_timer(1.0).timeout
-	
-	if level == final_seed_level -1:
-		tile_map.erase_cell(interaction_layer, tile_mouse_pos)
+	if Global.can_plante:
 		var fruit = fruit_scene.instantiate()
 		fruit.position = Vector2(tile_mouse_pos.x *16+8, tile_mouse_pos.y *16+8)
 		add_child(fruit)
-		return
-		
-	else:
-		var new_atlas :Vector2i = Vector2i(atlas_coords[level])
-		tile_map.set_cell(interaction_layer, tile_mouse_pos, source_id, new_atlas)
-		handle_seed(tile_mouse_pos, level +1, atlas_coords, final_seed_level)	
+	#source_id = 2
+	#tile_map.set_cell(interaction_layer, tile_mouse_pos, source_id, atlas_coords[level])
+	#
+	#await get_tree().create_timer(1.0).timeout
+	#
+	#if level == final_seed_level:
+		#tile_map.erase_cell(interaction_layer, tile_mouse_pos)
+		#
+		#var fruit = fruit_scene.instantiate()
+		#fruit.position = Vector2(tile_mouse_pos.x *16+8, tile_mouse_pos.y *16+8)
+		#add_child(fruit)
+		#return
+		#
+	#else:
+		#var new_atlas :Vector2i = Vector2i(atlas_coords[level])
+		#tile_map.set_cell(interaction_layer, tile_mouse_pos, source_id, new_atlas)
+		#handle_seed(tile_mouse_pos, level +1, atlas_coords, final_seed_level)	
 		
 		
 #func normalize_array(array, min_value, max_value):
