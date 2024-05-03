@@ -49,8 +49,9 @@ func pickup_item():
 # If player is in range, show UI and make item pickable
 func _on_area_2d_body_entered(body):
 	if body.is_in_group("Player"):
-		player_in_range = true
-		body.interact_ui.visible = true
+		#player_in_range = true
+		#body.interact_ui.visible = true
+		pickup_item()
 		
 # If player is in range, hide UI and don't make item pickable
 func _on_area_2d_body_exited(body):
@@ -60,15 +61,18 @@ func _on_area_2d_body_exited(body):
 
 
 func _on_area_2d_mouse_entered():
-		player_in_range = true
-		Global.interaction_ui.visible = true
-		Global.interaction_label.visible = true
-		Global.interaction_label.text = self.item_name
-		Global.item_to_pickup = self
+	player_in_range = true
+	Global.interaction_ui.visible = true
+	Global.interaction_label.visible = true
+	Global.interaction_label.text = self.item_name
+	Global.item_to_pickup = self
+	print("entered")
 
 func _on_area_2d_mouse_exited():
-		player_in_range = false
-		if Global.item_to_pickup == self:
-			Global.interaction_ui.visible = false
-			Global.interaction_label.visible = false
-			Global.item_to_pickup = Node2D
+	player_in_range = false
+	if Global.item_to_pickup == self:
+		Global.interaction_ui.visible = false
+		Global.interaction_label.visible = false
+		Global.item_to_pickup = Node2D
+
+

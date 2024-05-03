@@ -1,10 +1,11 @@
-[gd_scene load_steps=11 format=3 uid="uid://dcyb7h6nubfok"]
+[gd_scene load_steps=14 format=3 uid="uid://dcyb7h6nubfok"]
 
 [ext_resource type="Script" path="res://Scripts/proc_gen_world.gd" id="1_aj1ci"]
 [ext_resource type="TileSet" uid="uid://dv6b72226ukkx" path="res://Data/tileset.tres" id="1_bi7v1"]
 [ext_resource type="PackedScene" uid="uid://c6gt07b2inb81" path="res://Scenes/player.tscn" id="3_ecxj2"]
 [ext_resource type="PackedScene" uid="uid://dqvcjkwbwadtw" path="res://Scenes/feu_de_camp.tscn" id="3_i40rv"]
 [ext_resource type="PackedScene" uid="uid://clbgps325bj3y" path="res://Scenes/inventory_item.tscn" id="4_ok1g6"]
+[ext_resource type="TileSet" uid="uid://dijoop0exv1hy" path="res://Data/world.tres" id="6_au8sw"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_fp7k5"]
 seed = 123
@@ -19,6 +20,13 @@ fractal_octaves = 1
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_87rhm"]
 noise = SubResource("FastNoiseLite_3juo6")
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_wga1x"]
+noise_type = 2
+frequency = 0.5882
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_eudnb"]
+noise = SubResource("FastNoiseLite_wga1x")
+
 [sub_resource type="LabelSettings" id="LabelSettings_yi1fn"]
 font_size = 20
 
@@ -27,6 +35,7 @@ y_sort_enabled = true
 script = ExtResource("1_aj1ci")
 noise_height_text = SubResource("NoiseTexture2D_00df7")
 noise_tree_text = SubResource("NoiseTexture2D_87rhm")
+noise_flower_text = SubResource("NoiseTexture2D_eudnb")
 player_scene = ExtResource("3_ecxj2")
 feu_de_camp_scene = ExtResource("3_i40rv")
 fruit_scene = ExtResource("4_ok1g6")
@@ -88,3 +97,31 @@ offset_bottom = 0.159973
 label_settings = SubResource("LabelSettings_yi1fn")
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="TileMap2" type="TileMap" parent="."]
+y_sort_enabled = true
+tile_set = ExtResource("6_au8sw")
+format = 2
+layer_0/name = "water"
+layer_0/tile_data = PackedInt32Array(1310753, 327686, 3, 1245217, 131078, 0, 1310752, 6, 2, 1245216, 6, 0, 1310757, 131078, 2, 1245221, 131078, 0, 1310756, 524294, 1, 1245220, 524294, 2, 1310755, 393222, 3, 1245219, 6, 0, 1376296, 131078, 2, 1310760, 327686, 1, 1245224, 327686, 2, 1179688, 131078, 1, 1114152, 327686, 1, 1376295, 6, 2, 1310759, 6, 1, 1245223, 6, 1, 1179687, 6, 1, 1114151, 6, 1, 1310762, 131078, 2, 1245226, 131078, 0, 1310761, 65542, 2, 1245225, 65542, 0, 1114153, 65542, 2, 1114154, 65542, 2, 1048616, 65542, 0, 1048617, 65542, 0, 1048615, 6, 0, 1048618, 65542, 0, 1048619, 131078, 0, 1114155, 131078, 2, 1376292, 196614, 1, 1441828, 524294, 3, 1441829, 131078, 3, 1441827, 262150, 0, 1310754, 65542, 3, 1179684, 196614, 1, 1114147, 65542, 3, 1114148, 524294, 0, 1114149, 458758, 3, 1048613, 196614, 0, 1048609, 196614, 0, 1114145, 524294, 3, 1114146, 65542, 3, 1114144, 65542, 3, 1114143, 327686, 0, 1114142, 6, 0, 1179678, 589830, 1, 1245214, 131078, 2, 1245213, 6, 2, 1179677, 6, 0, 1179679, 131078, 2, 1572894, 262150, 3, 1507358, 196614, 1, 1441822, 262150, 0, 1441823, 65542, 3, 1441824, 458758, 0, 1507360, 262150, 4, 1572896, 458758, 4, 1572895, 65542, 3, 1507361, 65542, 3, 1507363, 458758, 4, 1507362, 65542, 3, 1572899, 196614, 1, 1638435, 196614, 1, 1703971, 458758, 3, 1703970, 65542, 3, 1703969, 327686, 3, 1703968, 6, 2, 1638432, 262150, 2, 1638433, 131078, 0)
+layer_1/name = "beach"
+layer_1/tile_data = PackedInt32Array()
+layer_2/name = "sand_flowers"
+layer_2/tile_data = PackedInt32Array()
+layer_3/name = "grass"
+layer_3/tile_data = PackedInt32Array()
+layer_4/name = "flower"
+layer_4/tile_data = PackedInt32Array()
+layer_5/name = "dirt"
+layer_5/tile_data = PackedInt32Array()
+layer_6/name = "tree"
+layer_6/y_sort_enabled = true
+layer_6/z_index = 1
+layer_6/tile_data = PackedInt32Array()
+layer_7/name = "interaction"
+layer_7/y_sort_enabled = true
+layer_7/z_index = 1
+layer_7/tile_data = PackedInt32Array()
+layer_8/name = "cursor"
+layer_8/z_index = 10
+layer_8/tile_data = PackedInt32Array()
