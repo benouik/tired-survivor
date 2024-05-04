@@ -6,7 +6,7 @@
 [sub_resource type="AtlasTexture" id="AtlasTexture_a77fc"]
 resource_local_to_scene = true
 atlas = ExtResource("2_la0u7")
-region = Rect2(16, 0, 16, 16)
+region = Rect2(48, 0, 16, 32)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qxf2f"]
 size = Vector2(16, 16)
@@ -15,7 +15,7 @@ size = Vector2(16, 16)
 position = Vector2(0, 16)
 script = ExtResource("1_do300")
 item_type = "fruit"
-item_name = "Cerise"
+item_name = "Melon"
 item_texture = SubResource("AtlasTexture_a77fc")
 item_effect = "health"
 

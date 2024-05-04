@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://c6gt07b2inb81"]
+[gd_scene load_steps=30 format=3 uid="uid://c6gt07b2inb81"]
 
 [ext_resource type="Script" path="res://Scripts/player.gd" id="1_k0op5"]
 [ext_resource type="Texture2D" uid="uid://bdtpxia85muik" path="res://Sprites/Detective.png" id="2_gvrli"]
@@ -7,6 +7,8 @@
 [ext_resource type="LabelSettings" uid="uid://d7oua3pvvoo6" path="res://Fonts/label.tres" id="3_tyidl"]
 [ext_resource type="Shader" path="res://Shaders/ennemi.gdshader" id="4_2v60e"]
 [ext_resource type="Script" path="res://Scripts/RayCast.gd" id="6_nxdht"]
+[ext_resource type="FontFile" uid="uid://bi04iecmbt37l" path="res://Fonts/ARCADECLASSIC.TTF" id="8_p2uvx"]
+[ext_resource type="PackedScene" uid="uid://cyf0p1knbldrj" path="res://Scenes/inventory_ui.tscn" id="9_4q5lt"]
 
 [sub_resource type="Gradient" id="Gradient_84xoc"]
 offsets = PackedFloat32Array(0.0388489, 0.946763)
@@ -268,6 +270,7 @@ _data = {
 }
 
 [node name="Player" type="CharacterBody2D" groups=["Player"]]
+process_mode = 3
 z_index = 1
 y_sort_enabled = true
 collision_layer = 2
@@ -364,6 +367,36 @@ polygon = PackedVector2Array(2, 2, 3, 0, 2, -2, 0, -3, -2, -2, -3, 0, -2, 2, 0, 
 
 [node name="TimerEtrangle" type="Timer" parent="."]
 one_shot = true
+
+[node name="InventoryUI" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="ColorRect" type="ColorRect" parent="InventoryUI"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+color = Color(0.388235, 0.47451, 0.466667, 1)
+
+[node name="Label" type="Label" parent="InventoryUI/ColorRect"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -148.5
+offset_top = 50.0
+offset_right = 148.5
+offset_bottom = 111.0
+grow_horizontal = 2
+size_flags_horizontal = 0
+theme_override_fonts/font = ExtResource("8_p2uvx")
+theme_override_font_sizes/font_size = 60
+text = "Inventory"
+
+[node name="Inventory_UI" parent="InventoryUI/ColorRect" instance=ExtResource("9_4q5lt")]
+layout_mode = 1
 
 [connection signal="timeout" from="TimerCoinCooldown" to="." method="_on_timer_coin_cooldown_timeout"]
 [connection signal="timeout" from="TimerDeath" to="." method="_on_timer_death_timeout"]

@@ -22,6 +22,7 @@ func _ready():
 	if not Engine.is_editor_hint():
 		icon_sprite.texture = item_texture
 	item_name = ["Fraise", "Melon", "Cerise"].pick_random()
+	item_effect = ["Sante", "Vitesse", "Energie"].pick_random()
 	
 	if self.is_in_group("seeds"):
 		

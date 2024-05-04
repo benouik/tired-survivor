@@ -19,6 +19,8 @@ var sur_batterie:bool = false
 
 #@onready var interaction_ui = $InteractionUI
 @onready var animations = $AnimationPlayer
+@onready var inventory_ui = $InventoryUI
+
 
 signal coin(pos, dir)
 signal grenade(pos, dir, vel)
@@ -165,6 +167,11 @@ func _input(_event):
 	if Input.is_action_just_pressed("zoom_out"):
 		var zoom_val = max($Camera2D.zoom.x - 0.1, min_zoom)
 		$Camera2D.zoom = Vector2(zoom_val, zoom_val)
+		
+	if Input.is_action_just_pressed("inventory"):
+		inventory_ui.visible = !inventory_ui.visible
+		get_tree().paused = !get_tree().paused
+		
 		
 func _process(_delta):
 	

@@ -18,9 +18,13 @@ signal inventory_updated
 var item_to_pickup = Node2D
 var world: Node2D
 
+@onready var inventory_slot_scene = preload("res://Scenes/inventory_slot.tscn")
+
+
 func _ready(): 
 	# Initializes the inventory with 30 slots (spread over 9 blocks per row)
-	inventory.resize(30) 
+	inventory.resize(30)
+	
 	
 func remove_seed_tile_at_cursor():
 	var mouse_pos :Vector2 = world.get_global_mouse_position()
