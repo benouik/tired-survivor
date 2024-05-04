@@ -14,7 +14,7 @@ var item = null
 
 func _on_item_button_mouse_entered():
 	if item != null:
-		usage_panel.visible = false
+		#usage_panel.visible = false
 		detail_panel.visible = true
 	print("Mouse entrée")
 
@@ -35,7 +35,7 @@ func set_empty():
 func set_item(new_item):
 	item = new_item
 	icon.texture = item["texture"]
-	icon.texture.region = Rect2(0, 0, 16, 16)
+	#icon.texture.region = Rect2(64, 16, 16, 16)
 	quantity_label.text = str(item["quantity"])
 	item_name.text = str(item["name"])
 	item_type.text = str(item["type"])

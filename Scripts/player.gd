@@ -17,6 +17,9 @@ var aim_pos: Vector2
 
 var sur_batterie:bool = false
 
+var on_grass: bool
+var tile_pos: Vector2i
+
 #@onready var interaction_ui = $InteractionUI
 @onready var animations = $AnimationPlayer
 @onready var inventory_ui = $InventoryUI
@@ -117,12 +120,24 @@ func set_shader_intensity(value: float):
 func _ready():
 	# Set this node as the Player node
 	Global.set_player_reference(self)
+	check_ground()
+	
 	#Globals.connect("alarm_triggered", on_connerie)
 	#$"../../CanvasLayer2/Control/Label".text = str(nrj)
 #func on_connerie():
 	#$TextBox/Label.text = "Oups"
 	#$TimerLabel.start()
 	#$TextBox/Label.show()
+
+func check_ground():
+	tile_pos = Global.tile_map.local_to_map(position)
+
+	var data = Global.tile_map.get_cell_tile_data(3, tile_pos)
+	
+	if data:
+		on_grass = true
+	else:
+		on_grass = false
 
 func updateAnimation():
 	# print(Globals.alarme)
@@ -199,8 +214,17 @@ func _process(_delta):
 	#	print(Globals.player_pos)
 		#Globals.player_pos = $Marker2D.global_position
 		
+		var current_speed: int
+		
+		check_ground()
+		
+		if not on_grass:
+			current_speed = speed - 30
+		else:
+			current_speed = speed
+
 		var direction = Input.get_vector("left", "right", "up", "down")
-		velocity = direction * speed
+		velocity = direction * current_speed
 		updateAnimation()
 		move_and_slide()
 

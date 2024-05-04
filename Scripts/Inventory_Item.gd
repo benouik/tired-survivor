@@ -7,10 +7,11 @@ extends Node2D
 @export var item_name = ""
 @export var item_texture: Texture
 @export var item_effect = ""
+
 var ramassable = false
 var etapes = 5
 var scene_path: String = "res://Scenes/Inventory_Item.tscn"
-
+@onready var icon_texture = $Icon.texture
 # Scene-Tree Node references
 @onready var icon_sprite = $Sprite2D
 
@@ -18,11 +19,10 @@ var scene_path: String = "res://Scenes/Inventory_Item.tscn"
 var player_in_range = false
 
 func _ready():
-	# Set the texture to reflect in the game
-	if not Engine.is_editor_hint():
-		icon_sprite.texture = item_texture
-	item_name = ["Fraise", "Melon", "Cerise"].pick_random()
-	item_effect = ["Sante", "Vitesse", "Energie"].pick_random()
+	
+	icon_sprite.texture = item_texture
+	#item_name = ["Fraise", "Melon", "Cerise"].pick_random()
+	#item_effect = ["Sante", "Vitesse", "Energie"].pick_random()
 	
 	if self.is_in_group("seeds"):
 		
@@ -51,7 +51,7 @@ func pickup_item():
 		"type": item_type,
 		"name": item_name,
 		"effect": item_effect,
-		"texture": item_texture,
+		"texture": icon_texture, #item_texture,
 		"scene_path": scene_path
 	}
 	if Global.player_node:

@@ -227,11 +227,13 @@ func place_tree(pos):
 	
 func _input(_event):
 	if Input.is_action_just_pressed("toggle_dirt"):
-		farming_mode_state = FARMING_MODES.DIRT
+		#farming_mode_state = FARMING_MODES.DIRT
+		Global.tool_on_hand = "houe"
 		#print("dirt")
 	if Input.is_action_just_pressed("toggle_seeds"):
 		#print("seeds")
-		farming_mode_state = FARMING_MODES.SEEDS
+		#farming_mode_state = FARMING_MODES.SEEDS
+		Global.tool_on_hand = "seed"
 		
 	if Input.is_action_just_released("click"):
 		last_action = ""
@@ -239,6 +241,7 @@ func _input(_event):
 		
 	if Input.is_action_just_pressed("click") and cursor_active:
 		
+		var tool_on_hand = Global.tool_on_hand
 
 		
 		var mouse_pos :Vector2 = get_global_mouse_position()
@@ -273,7 +276,7 @@ func _input(_event):
 			
 			
 			
-			if farming_mode_state == FARMING_MODES.SEEDS and not interaction_present and Global.item_to_pickup == Node2D:
+			if tool_on_hand == "seed": # farming_mode_state == FARMING_MODES.SEEDS and not interaction_present and Global.item_to_pickup == Node2D:
 				if last_action == "seeds" or last_action == "":
 					last_action = "seeds"
 					print("seeds")
@@ -284,7 +287,7 @@ func _input(_event):
 						var final_seed_level :int = 4
 						handle_seed(tile_mouse_pos, level, atlas_coord, final_seed_level)
 					
-			elif farming_mode_state == FARMING_MODES.DIRT and not interaction_present and Global.item_to_pickup == Node2D:
+			elif tool_on_hand == "houe": # farming_mode_state == FARMING_MODES.DIRT and not interaction_present and Global.item_to_pickup == Node2D:
 				if last_action == "dirt" or last_action == "":
 					last_action = "dirt"
 					print("dirt")
@@ -310,7 +313,10 @@ func handle_seed2(tile_mouse_pos, level, atlas_coords, final_seed_level):
 
 func handle_seed(tile_mouse_pos, level, atlas_coords, final_seed_level):
 	if Global.can_plante:
+		Global.can_plante = false
 		var fruit = fruit_scene.instantiate()
+		fruit.item_name = ["Fraise", "Melon", "Cerise"].pick_random()
+		fruit.item_effect = ["Sante", "Vitesse", "Energie"].pick_random()
 		fruit.position = Vector2(tile_mouse_pos.x *16+8, tile_mouse_pos.y *16+8)
 		add_child(fruit)
 	#source_id = 2

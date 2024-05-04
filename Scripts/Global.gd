@@ -18,6 +18,8 @@ signal inventory_updated
 var item_to_pickup = Node2D
 var world: Node2D
 
+var tool_on_hand = null
+
 @onready var inventory_slot_scene = preload("res://Scenes/inventory_slot.tscn")
 
 

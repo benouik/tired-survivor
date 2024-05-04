@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://cx0w4mqd7aul1"]
+[gd_scene load_steps=5 format=3 uid="uid://dxpx5dpml8o5e"]
 
 [ext_resource type="Script" path="res://Scripts/inventory_slot.gd" id="1_eqg1n"]
 [ext_resource type="Texture2D" uid="uid://dl2l1agacae6y" path="res://Sprites/icon_carottes.png" id="2_qu612"]
@@ -42,7 +42,8 @@ color = Color(0.509286, 0.509286, 0.509286, 1)
 position = Vector2(45, 45)
 scale = Vector2(4, 4)
 texture = ExtResource("2_qu612")
-region_rect = Rect2(64, 16, 16, 16)
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
 
 [node name="ItemQuantity" type="Label" parent="InnerBorder"]
 layout_mode = 0
