@@ -23,7 +23,7 @@ var tile_pos: Vector2i
 #@onready var interaction_ui = $InteractionUI
 @onready var animations = $AnimationPlayer
 @onready var inventory_ui = $InventoryUI
-
+@onready var hotbar = $Hotbar
 
 signal coin(pos, dir)
 signal grenade(pos, dir, vel)
@@ -185,6 +185,7 @@ func _input(_event):
 		
 	if Input.is_action_just_pressed("inventory"):
 		inventory_ui.visible = !inventory_ui.visible
+		hotbar.visible = !hotbar.visible
 		get_tree().paused = !get_tree().paused
 		
 		

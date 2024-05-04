@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://Scripts/proc_gen_world.gd" id="1_aj1ci"]
 [ext_resource type="TileSet" uid="uid://dv6b72226ukkx" path="res://Data/tileset.tres" id="1_bi7v1"]
-[ext_resource type="PackedScene" uid="uid://c6gt07b2inb81" path="res://Scenes/player.tscn" id="3_ecxj2"]
+[ext_resource type="PackedScene" uid="uid://c4qjaucw5hqmb" path="res://Scenes/player.tscn" id="3_ecxj2"]
 [ext_resource type="PackedScene" uid="uid://dqvcjkwbwadtw" path="res://Scenes/feu_de_camp.tscn" id="3_i40rv"]
 [ext_resource type="PackedScene" uid="uid://clbgps325bj3y" path="res://Scenes/inventory_item.tscn" id="4_ok1g6"]
 [ext_resource type="TileSet" uid="uid://dijoop0exv1hy" path="res://Data/world.tres" id="6_au8sw"]

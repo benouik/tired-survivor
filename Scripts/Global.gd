@@ -11,6 +11,8 @@ var cursor_active: bool = false
 var tile_map: TileMap
 # Inventory items
 var inventory = []
+var hotbar_size = 5
+var hotbar = []
 var can_plante: bool = true
 # Custom signals
 signal inventory_updated
@@ -26,8 +28,16 @@ var tool_on_hand = null
 func _ready(): 
 	# Initializes the inventory with 30 slots (spread over 9 blocks per row)
 	inventory.resize(30)
+	hotbar.resize(hotbar_size)
 	
-	
+func add_to_hotbar(item):
+	for i in range(hotbar_size):
+		if hotbar[i] == null:
+			hotbar[i] = item
+			return true
+	return false
+		
+
 func remove_seed_tile_at_cursor():
 	var mouse_pos :Vector2 = world.get_global_mouse_position()
 	var tile_mouse_pos :Vector2i = tile_map.local_to_map(mouse_pos)
@@ -53,24 +63,49 @@ func set_player_reference(player):
 	#print(interaction_ui)
 
 # Adds an item to the inventory, returns true if successful
-func add_item(item):
+func add_item(item, to_hotbar=false):
+	
+	var added_to_hotbar = false
+
+	if to_hotbar:
+		added_to_hotbar = add_to_hotbar(item)
+		inventory_updated.emit()
+	
+	if not added_to_hotbar:
+		for i in range(inventory.size()):
+			# Check if the item exists in the inventory and matches both type and effect
+			if inventory[i] != null and inventory[i]["type"] == item["type"] and inventory[i]["effect"] == item["effect"]:
+				inventory[i]["quantity"] += item["quantity"]
+				inventory_updated.emit()
+				print("Item added", inventory)
+				return true
+			elif inventory[i] == null:
+				inventory[i] = item
+				inventory_updated.emit()
+				print("Item added", inventory)
+				return true
+		return false
+
+# Removes an item from the inventory based on type and effect
+func remove_item(item_type, item_effect):
 	for i in range(inventory.size()):
-		# Check if the item exists in the inventory and matches both type and effect
-		if inventory[i] != null and inventory[i]["type"] == item["type"] and inventory[i]["effect"] == item["effect"]:
-			inventory[i]["quantity"] += item["quantity"]
+		if inventory[i] != null and inventory[i]["type"] == item_type and inventory[i]["effect"] == item_effect:
+			inventory[i]["quantity"] -= 1
+			if inventory[i]["quantity"] <= 0:
+				inventory[i] = null
 			inventory_updated.emit()
-			print("Item added", inventory)
-			return true
-		elif inventory[i] == null:
-			inventory[i] = item
-			inventory_updated.emit()
-			print("Item added", inventory)
 			return true
 	return false
 
-# Removes an item from the inventory based on type and effect
-func remove_item():
-	inventory_updated.emit()
+func remove_from_hotbar(item_type, item_effect):
+	for i in range(hotbar.size()):
+		if hotbar[i] != null and hotbar[i]["type"] == item_type and hotbar[i]["effect"] == item_effect:
+			if hotbar[i]["quantity"] <= 0:
+				hotbar[i] = null
+			inventory_updated.emit()
+			return true
+	return false
+		
 
 # Increase inventory size dynamically
 func increase_inventory_size():

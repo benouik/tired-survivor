@@ -56,6 +56,7 @@ func pickup_item():
 	}
 	if Global.player_node:
 		Global.add_item(item)
+		Global.add_item(item, true)
 		self.queue_free()
 		if Global.item_to_pickup == self:
 			Global.item_to_pickup = Node2D

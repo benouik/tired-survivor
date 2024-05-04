@@ -6,36 +6,22 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lxa4s"]
 
-[node name="Inventory_Slot" type="Control"]
+[node name="Inventory_Slot" type="Control" groups=["inventory_slots"]]
 process_mode = 3
 layout_mode = 3
 anchors_preset = 0
-offset_right = 10.0
-offset_bottom = 10.0
 script = ExtResource("1_eqg1n")
 
 [node name="OuterBorder" type="ColorRect" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 0
+offset_right = 80.0
+offset_bottom = 80.0
 color = Color(0.52549, 1, 0.996078, 1)
 
 [node name="InnerBorder" type="ColorRect" parent="."]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -45.0
-offset_top = -45.0
-offset_right = 45.0
-offset_bottom = 45.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 0
+offset_right = 80.0
+offset_bottom = 80.0
 color = Color(0.509286, 0.509286, 0.509286, 1)
 
 [node name="ItemIcon" type="Sprite2D" parent="InnerBorder"]
@@ -56,18 +42,14 @@ text = "1
 "
 
 [node name="ItemButton" type="Button" parent="."]
-layout_mode = 1
-anchors_preset = -1
-offset_left = -45.0
-offset_top = -45.0
-offset_right = 45.0
-offset_bottom = 45.0
+layout_mode = 0
+offset_right = 80.0
+offset_bottom = 80.0
+focus_neighbor_top = NodePath("../UsagePanel")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_lxa4s")
 
 [node name="DetailsPanel" type="ColorRect" parent="."]
 visible = false
-z_index = 1
-layout_mode = 0
 offset_left = 10.0
 offset_top = -90.0
 offset_right = 170.0
@@ -115,12 +97,11 @@ text = "EFFECT"
 
 [node name="UsagePanel" type="ColorRect" parent="."]
 visible = false
-z_index = 2
-layout_mode = 0
 offset_left = 10.0
 offset_top = -90.0
 offset_right = 170.0
 offset_bottom = -10.0
+focus_neighbor_bottom = NodePath("../ItemButton")
 color = Color(0.52549, 1, 0.996078, 1)
 
 [node name="UseButton" type="Button" parent="UsagePanel"]
@@ -133,6 +114,7 @@ offset_top = 7.0
 offset_right = 75.0
 offset_bottom = 38.0
 grow_horizontal = 2
+focus_neighbor_bottom = NodePath("../../ItemButton")
 text = "USE"
 
 [node name="DropButton" type="Button" parent="UsagePanel"]
@@ -148,6 +130,7 @@ offset_right = 75.0
 offset_bottom = -6.0
 grow_horizontal = 2
 grow_vertical = 0
+focus_neighbor_bottom = NodePath("../../ItemButton")
 text = "DROP
 "
 

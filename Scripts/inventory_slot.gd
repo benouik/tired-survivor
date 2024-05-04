@@ -9,15 +9,31 @@ extends Control
 @onready var item_effect = $DetailsPanel/ItemEffect
 @onready var usage_panel = $UsagePanel
 
-var item = null
 
+
+var item = null
+var blocked: bool = false
+var slot_index = -1
+
+func set_slot_index(new_index):
+	slot_index = new_index
 
 func _on_item_button_mouse_entered():
-	if item != null:
+	if item != null and not blocked:
 		#usage_panel.visible = false
 		detail_panel.visible = true
-	print("Mouse entrée")
+	#print("Mouse entrée")
 
+func block(item):
+	if item != self:
+		blocked = !blocked
+	
+		if blocked:
+			$ItemButton.disabled = true
+			$ItemButton.visible = false
+		else:
+			$ItemButton.disabled = false
+			$ItemButton.visible = true
 
 func _on_item_button_mouse_exited():
 	if item != null:
@@ -27,6 +43,7 @@ func _on_item_button_mouse_exited():
 func _on_item_button_pressed():
 	if item != null:
 		usage_panel.visible = !usage_panel.visible
+		get_tree().call_group("inventory_slots", "block", self)
 
 func set_empty():
 	icon.texture = null
