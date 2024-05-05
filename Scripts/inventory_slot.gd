@@ -51,7 +51,7 @@ func set_empty():
 	
 func set_item(new_item):
 	item = new_item
-	icon.texture = item["texture"]
+	icon.texture = load(item["icon"])
 	#icon.texture.region = Rect2(64, 16, 16, 16)
 	quantity_label.text = str(item["quantity"])
 	item_name.text = str(item["name"])

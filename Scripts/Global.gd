@@ -30,13 +30,25 @@ func _ready():
 	inventory.resize(30)
 	hotbar.resize(hotbar_size)
 	
-func add_to_hotbar(item):
-	for i in range(hotbar_size):
+func add_to_hotbar(inv_id):
+	for i in range(hotbar.size()):
 		if hotbar[i] == null:
-			hotbar[i] = item
+			hotbar[i] = { "id": inv_id, "object": inventory[inv_id]["object"]}
 			return true
 	return false
-		
+
+func is_in_hotbar(inv_id):
+	for i in range(hotbar.size()):
+		if hotbar[i] != null and hotbar[i]['id'] == inventory[inv_id]["id"]:
+			return true
+	return false
+
+func update_hotbar_quantity(inv_id, value):
+	for i in range(hotbar.size()):
+		if hotbar[i]["id"] == inventory[inv_id]["id"]:
+			hotbar[i]["object"]["quantity"] += value
+			return true
+	return false
 
 func remove_seed_tile_at_cursor():
 	var mouse_pos :Vector2 = world.get_global_mouse_position()
@@ -67,22 +79,31 @@ func add_item(item, to_hotbar=false):
 	
 	var added_to_hotbar = false
 
-	if to_hotbar:
-		added_to_hotbar = add_to_hotbar(item)
-		inventory_updated.emit()
+	#if to_hotbar:
+		#added_to_hotbar = add_to_hotbar(item)
+		#inventory_updated.emit()
 	
 	if not added_to_hotbar:
 		for i in range(inventory.size()):
 			# Check if the item exists in the inventory and matches both type and effect
-			if inventory[i] != null and inventory[i]["type"] == item["type"] and inventory[i]["effect"] == item["effect"]:
-				inventory[i]["quantity"] += item["quantity"]
+			if inventory[i] != null and inventory[i]["object"]["id"] == item["id"]: # inventory[i]["type"] == item["type"] and inventory[i]["effect"] == item["effect"]:
+				inventory[i]["object"]["quantity"] += 1 #item["quantity"]
+				#if is_in_hotbar(i):
+					#pass
+					##update_hotbar_quantity(i, 1) # item["quantity"])
+				#else:
+					#add_to_hotbar(i)
 				inventory_updated.emit()
-				print("Item added", inventory)
+				print("Item updated", inventory)
 				return true
-			elif inventory[i] == null:
-				inventory[i] = item
+		for i in range(inventory.size()):
+			if inventory[i] == null:
+				inventory[i] = {"id": i, "object": item}
 				inventory_updated.emit()
 				print("Item added", inventory)
+				#if to_hotbar:
+				add_to_hotbar(i)
+				inventory_updated.emit()
 				return true
 		return false
 

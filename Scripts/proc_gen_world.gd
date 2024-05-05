@@ -315,8 +315,9 @@ func handle_seed(tile_mouse_pos, level, atlas_coords, final_seed_level):
 	if Global.can_plante:
 		Global.can_plante = false
 		var fruit = fruit_scene.instantiate()
-		fruit.item_name = ["Fraise", "Melon", "Cerise"].pick_random()
-		fruit.item_effect = ["Sante", "Vitesse", "Energie"].pick_random()
+		fruit.id = "carotte_seeds"
+		#fruit.item_name = ["Fraise", "Melon", "Cerise"].pick_random()
+		#fruit.item_effect = ["Sante", "Vitesse", "Energie"].pick_random()
 		fruit.position = Vector2(tile_mouse_pos.x *16+8, tile_mouse_pos.y *16+8)
 		add_child(fruit)
 	#source_id = 2

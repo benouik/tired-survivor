@@ -3,28 +3,52 @@
 extends Node2D
 
 # Item details for editor window
-@export var item_type = ""
-@export var item_name = ""
-@export var item_texture: Texture
-@export var item_effect = ""
+#@export var item_type = ""
+#@export var item_name = ""
+#@export var item_texture: Texture
+#@export var item_effect = ""
 
 var ramassable = false
 var etapes = 5
 var scene_path: String = "res://Scenes/Inventory_Item.tscn"
-@onready var icon_texture = $Icon.texture
+#@onready var icon_texture = $Icon.texture
 # Scene-Tree Node references
 @onready var icon_sprite = $Sprite2D
+var id = ""
 
 # Variables
 var player_in_range = false
+var item: Dictionary
+
 
 func _ready():
 	
-	icon_sprite.texture = item_texture
+	
+
+
 	#item_name = ["Fraise", "Melon", "Cerise"].pick_random()
 	#item_effect = ["Sante", "Vitesse", "Energie"].pick_random()
+	print(Objets.objets)
+	print("item id: " + id)
+	
+	for i in range(Objets.objets.size()):
+		print("id :" + str(id))
+		print(Objets.objets[i]["id"])
+		if Objets.objets[i]["id"] == id:
+			item = Objets.objets[i]
+		
+	print("item: " + str(item))
+
+	for group in item["groups"]:
+		self.add_to_group(group)
+		
+	
+	
 	
 	if self.is_in_group("seeds"):
+		var texture = AtlasTexture.new()
+		texture.set_atlas(load(item["grow_texture"]))
+		$Sprite2D.texture = texture
 		
 		var etapes_sprites_arr = [Rect2(16, 0, 16, 16), Rect2(64, 0, 16, 16), Rect2(0, 16, 16, 16), Rect2(32, 0, 16, 32), Rect2(48, 0, 16, 32)]
 		var etapes_position_y_arr = [8,8,8,0,0]
@@ -38,25 +62,24 @@ func _ready():
 		
 		ramassable = true
 
-func _process(_delta):
-	# Set the texture to reflect in the editor
-	if Engine.is_editor_hint():
-		icon_sprite.texture = item_texture
-
 # Add item to inventory
 func pickup_item():
 	
-	var item = {
-		"quantity": 1,
-		"type": item_type,
-		"name": item_name,
-		"effect": item_effect,
-		"texture": icon_texture, #item_texture,
-		"scene_path": scene_path
-	}
+	#var item = {
+		#"quantity": 1,
+		#"name": item["name"],
+		#"effect": item["effect"],
+		#"texture": load(item["icon"]), #item_texture,
+		#"scene_path": scene_path
+	#}
 	if Global.player_node:
+		
+		for i in range(Objets.objets.size()):
+			if Objets.objets[i]["id"] == item["final_object"]:
+				item = Objets.objets[i]
+		
 		Global.add_item(item)
-		Global.add_item(item, true)
+		#Global.add_item(item, true)
 		self.queue_free()
 		if Global.item_to_pickup == self:
 			Global.item_to_pickup = Node2D
@@ -82,7 +105,7 @@ func _on_area_2d_mouse_entered():
 	#player_in_range = true
 	Global.interaction_ui.visible = true
 	Global.interaction_label.visible = true
-	Global.interaction_label.text = self.item_name
+	Global.interaction_label.text = self.item["name"]
 	Global.can_plante = false
 	#Global.item_to_pickup = self
 	#print("entered")

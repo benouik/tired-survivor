@@ -50,6 +50,7 @@ theme_override_styles/normal = SubResource("StyleBoxEmpty_lxa4s")
 
 [node name="DetailsPanel" type="ColorRect" parent="."]
 visible = false
+layout_mode = 0
 offset_left = 10.0
 offset_top = -90.0
 offset_right = 170.0
@@ -97,6 +98,7 @@ text = "EFFECT"
 
 [node name="UsagePanel" type="ColorRect" parent="."]
 visible = false
+layout_mode = 0
 offset_left = 10.0
 offset_top = -90.0
 offset_right = 170.0

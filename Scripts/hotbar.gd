@@ -17,7 +17,7 @@ func _update_hotbar_ui():
 		hotbar_container.add_child(slot)
 		
 		if Global.hotbar[i] != null:
-			slot.set_item(Global.hotbar[i])
+			slot.set_item(Global.hotbar[i]["object"])
 		else:
 			slot.set_empty()
 		

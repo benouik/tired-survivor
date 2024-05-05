@@ -21,7 +21,7 @@ func _on_inventory_updated():
 		grid_container.add_child(slot)
 		
 		if item != null:
-			slot.set_item(item)
+			slot.set_item(item["object"])
 		else:
 			slot.set_empty()
 	
