@@ -14,6 +14,8 @@ var inventory = []
 var hotbar_size = 5
 var hotbar = []
 var can_plante: bool = true
+var grabbed_slot: int
+var receiving_slot: int
 # Custom signals
 signal inventory_updated
 
@@ -27,7 +29,7 @@ var tool_on_hand = null
 
 func _ready(): 
 	# Initializes the inventory with 30 slots (spread over 9 blocks per row)
-	inventory.resize(30)
+	inventory.resize(24)
 	hotbar.resize(hotbar_size)
 	
 func add_to_hotbar(inv_id):
@@ -102,7 +104,7 @@ func add_item(item, to_hotbar=false):
 				inventory_updated.emit()
 				print("Item added", inventory)
 				#if to_hotbar:
-				add_to_hotbar(i)
+				#add_to_hotbar(i)
 				inventory_updated.emit()
 				return true
 		return false
@@ -131,4 +133,15 @@ func remove_from_hotbar(item_type, item_effect):
 # Increase inventory size dynamically
 func increase_inventory_size():
 	inventory_updated.emit()
+
+# Swaps items in the inventory based on their indices
+func swap_inventory_items(index1, index2):
+	if index1 < 0 or index1 >= inventory.size() or index2 < 0 or index2 >= inventory.size():
+		return false
+	var temp = inventory[index1]
+	inventory[index1] = inventory[index2]
+	inventory[index2] = temp
+	inventory_updated.emit()
+	return true
+	
 

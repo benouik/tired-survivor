@@ -36,6 +36,8 @@ var tile_pos: Vector2i
 #@onready var interaction_ui = $InteractionUI
 @onready var animations = $AnimationPlayer
 @onready var inventory_ui = $InventoryUI
+#@onready var inventory_ui = $InventoryUI/ColorRect/Inventory_UI/GridContainer
+
 @onready var hotbar = $Hotbar
 
 signal coin(pos, dir)
@@ -198,7 +200,7 @@ func _input(_event):
 		
 	if Input.is_action_just_pressed(\"inventory\"):
 		inventory_ui.visible = !inventory_ui.visible
-		hotbar.visible = !hotbar.visible
+		#hotbar.visible = !hotbar.visible
 		get_tree().paused = !get_tree().paused
 		
 		
@@ -733,6 +735,10 @@ visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 240.0
+offset_top = 60.0
+offset_right = -240.0
+offset_bottom = -160.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4

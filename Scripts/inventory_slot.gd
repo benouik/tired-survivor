@@ -8,12 +8,16 @@ extends Control
 @onready var item_type = $DetailsPanel/ItemType
 @onready var item_effect = $DetailsPanel/ItemEffect
 @onready var usage_panel = $UsagePanel
+@onready var outer_border = $OuterBorder
 
 
 
 var item = null
 var blocked: bool = false
-var slot_index = -1
+var slot_index: int
+
+signal drag_start(slot) 
+signal drag_end()
 
 func set_slot_index(new_index):
 	slot_index = new_index
@@ -43,7 +47,7 @@ func _on_item_button_mouse_exited():
 func _on_item_button_pressed():
 	if item != null:
 		usage_panel.visible = !usage_panel.visible
-		get_tree().call_group("inventory_slots", "block", self)
+		#get_tree().call_group("inventory_slots", "block", self)
 
 func set_empty():
 	icon.texture = null
@@ -60,5 +64,19 @@ func set_item(new_item):
 		item_effect.text = str(item["effect"])
 	else:
 		item_effect.text = ""
-	
 
+
+func _on_item_button_gui_input(event):
+	if event is InputEventMouseButton:
+		#print(event.button_index)
+		if event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
+			if item != null:
+				usage_panel.visible = !usage_panel.visible
+		# Handle right mouse button for drag
+		if event.button_index == MOUSE_BUTTON_RIGHT:
+			if event.pressed:
+				outer_border.modulate = Color(1, 1, 0)
+				drag_start.emit(self)
+			else:
+				outer_border.modulate = Color(1, 1, 1)
+				drag_end.emit()

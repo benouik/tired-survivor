@@ -13,11 +13,18 @@ script = ExtResource("1_to0cg")
 
 [node name="GridContainer" type="GridContainer" parent="."]
 custom_minimum_size = Vector2(100, 100)
-layout_mode = 0
-offset_left = 240.0
-offset_top = 150.0
-offset_right = 1040.0
-offset_bottom = 650.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 160.0
+offset_right = 10.0
+offset_bottom = 160.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_constants/h_separation = 100
 theme_override_constants/v_separation = 100
-columns = 9
+columns = 8
+
+[connection signal="gui_input" from="GridContainer" to="." method="_on_grid_container_gui_input"]
