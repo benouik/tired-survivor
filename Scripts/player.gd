@@ -2,11 +2,7 @@ extends CharacterBody2D
 
 var speed:int = 120
 var animDirection = "Down"
-var can_lauch_coin: bool = true
 var dead = false
-var disable_coin: bool = false
-var can_launch_grenade: bool = true
-var can_strangule: bool = true
 
 var can_be_hit: bool = true
 var health: int = 3
@@ -118,20 +114,18 @@ func set_shader_intensity(value: float):
 	$Sprite2D.material.set_shader_parameter("intensity", value)
 
 func _ready():
+	
 	# Set this node as the Player node
 	Global.set_player_reference(self)
 	check_ground()
 	
-	#Globals.connect("alarm_triggered", on_connerie)
-	#$"../../CanvasLayer2/Control/Label".text = str(nrj)
-#func on_connerie():
-	#$TextBox/Label.text = "Oups"
-	#$TimerLabel.start()
-	#$TextBox/Label.show()
-
+# Regarde quel type de sol sous le joueur.
 func check_ground():
+	
+	# Les coordonnées de la Tile sur laquelle le joueur se trouve
 	tile_pos = Global.tile_map.local_to_map(position)
-
+	
+	# On vérifie si il y a une Tile sur le Grass Layer 
 	var data = Global.tile_map.get_cell_tile_data(3, tile_pos)
 	
 	if data:
@@ -139,8 +133,11 @@ func check_ground():
 	else:
 		on_grass = false
 
+
+
 func updateAnimation():
-	# print(Globals.alarme)
+	
+	
 	var mode = ""
 	if velocity.x == 0 and velocity.y == 0:
 		mode = "idle"
@@ -161,19 +158,11 @@ func updateAnimation():
 		if view_angle >= -45 and view_angle <= 45:
 			animDirection = "Right"		
 
-#		if velocity.x > 0:
-#			animDirection = "Right"
-#		elif velocity.x < 0:
-#			animDirection = "Left"
-#		elif velocity.y > 0:
-#			animDirection = "Down"
-#		elif velocity.y < 0:
-#			animDirection = "Up"
-		
 	animations.play(mode + animDirection)
 
 #func _draw():
 #	draw_line(Vector2.ZERO, aim_pos, Color(1, 1, 1, 1))
+
 
 func _input(_event):
 	if Input.is_action_just_pressed("zoom_in"):
@@ -192,29 +181,8 @@ func _input(_event):
 func _process(_delta):
 	
 	$TextBox.offset = global_position
-#	var result = cast_ray(Vector2.ZERO, to_local(get_global_mouse_position()))
-#	if result:
-#		print(result)
-#		aim_pos = result.position
-#
-	#$RayCast2D.target_position = to_local($"../../Home/CollisionShape2D".global_position)
-#
-#	$Line2D.points = [Vector2.ZERO, aim_pos]
-#	$Line2D.points[0] = global_position.y
-#	$Line2D.points[1] = get_global_mouse_position()
-#	$Line2D.points[1] = position.y
 	if not dead:
-		
-		if sur_batterie:
-			pass
-			#print($TimerFatigue.time_left)
-			#$"../../CanvasLayer2/ProgressBar".value = $TimerFatigue.time_left * 100 / $TimerFatigue.wait_time 
-			#$"../../CanvasLayer2/ProgressBar".show()
-	#	look_at(get_global_mouse_position())
-		
-	#	print(Globals.player_pos)
-		#Globals.player_pos = $Marker2D.global_position
-		
+
 		var current_speed: int
 		
 		check_ground()
@@ -230,78 +198,9 @@ func _process(_delta):
 		move_and_slide()
 
 
-		#if Input.is_action_pressed("PrimaryAction"):
-			#if sur_batterie: 
-				#$Line2D.show()
-##				$Polygon2D.show()
-	#
-		#elif Input.is_action_just_released("PrimaryAction"):
-			#$Line2D.hide()
-			#$Polygon2D.hide()
-			#if can_lauch_coin and not disable_coin:
-				#trow_coin()
-				#can_lauch_coin = false
-				#$TimerCoinCooldown.start()
-		#
-		#
-		#
-		#if Input.is_action_pressed("SecondaryAction"):
-			#if can_launch_grenade:
-				#$Line2D.show()
-##				$Polygon2D.show()
-				#
-		#elif Input.is_action_just_released("SecondaryAction"):
-			#$Line2D.hide()
-			#$Polygon2D.hide()
-			#if can_launch_grenade:
-				#launch_grenade()
-				#$TimerGrenadeCooldown.start()
-		#
-		#if Input.is_action_pressed("etrangler"):
-			#if can_strangule:
-				#print("Je te strangule")
-				#etrangler.emit()
-				#$TimerEtrangle.start()
-				#can_strangule = false
-				#
-		#if Input.is_action_pressed("Reset"):
-			#death()
-
-func trow_coin():
-	var pos: Vector2 = $CoinSpawnPosition.global_position
-	var dir: Vector2 = (get_global_mouse_position() - position).normalized()
-	coin.emit(pos, dir)
-
-func launch_grenade():
-	can_launch_grenade = false
-	var pos: Vector2 = $CoinSpawnPosition.global_position
-	var dir: Vector2 = (get_global_mouse_position() - position).normalized()
-	var vel: Vector2 = velocity
-	var rot: float = pos.angle_to(dir)
-	grenade.emit(pos, dir, vel, rot)
-	
-
-
-
-func _on_timer_coin_cooldown_timeout():
-	can_lauch_coin = true
-
-
 func _on_timer_death_timeout():
 #	print("reload")
 	get_tree().reload_current_scene()
-
-
-func _on_area_2d_mouse_entered():
-	disable_coin = true
-
-
-func _on_area_2d_mouse_exited():
-	disable_coin = false
-
-
-func _on_timer_grenade_cooldown_timeout():
-	can_launch_grenade = true
 
 
 func _on_timer_label_timeout():
@@ -316,17 +215,11 @@ func _on_ray_cast_2d_see(pos, collide):
 	aim_pos = pos
 	$Line2D.points = [Vector2.ZERO, to_local(pos)]
 
-	if collide and (Input.is_action_pressed("SecondaryAction") or Input.is_action_pressed("PrimaryAction") and not disable_coin):
+	if collide and (Input.is_action_pressed("SecondaryAction") or Input.is_action_pressed("PrimaryAction")):
 		$Polygon2D.global_position = pos
 		$Polygon2D.show()
 	else:
 		$Polygon2D.hide()
-#	print(pos)
-
-
-func _on_timer_etrangle_timeout():
-	can_strangule = true
-
 
 func _on_home_area_entered(_area):
 	print("Revenu")

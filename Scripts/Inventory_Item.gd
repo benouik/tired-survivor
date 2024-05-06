@@ -30,16 +30,16 @@ func _ready():
 
 	#item_name = ["Fraise", "Melon", "Cerise"].pick_random()
 	#item_effect = ["Sante", "Vitesse", "Energie"].pick_random()
-	print(Objets.objets)
+	#print(Objets.objets)
 	print("item id: " + id)
 	
 	for i in range(Objets.objets.size()):
-		print("id :" + str(id))
-		print(Objets.objets[i]["id"])
+		#print("id :" + str(id))
+		#print(Objets.objets[i]["id"])
 		if Objets.objets[i]["id"] == id:
 			item = Objets.objets[i]
 		
-	print("item: " + str(item))
+	#print("item: " + str(item))
 
 	for group in item["groups"]:
 		self.add_to_group(group)
@@ -52,15 +52,16 @@ func _ready():
 		texture.set_atlas(load(item["grow_texture"]))
 		$Sprite2D.texture = texture
 		
-		var etapes_sprites_arr = [Rect2(16, 0, 16, 16), Rect2(64, 0, 16, 16), Rect2(0, 16, 16, 16), Rect2(32, 0, 16, 32), Rect2(48, 0, 16, 32)]
-		var etapes_position_y_arr = [8,8,8,0,0]
+		#var etapes_sprites_arr = [Rect2(16, 0, 16, 16), Rect2(64, 0, 16, 16), Rect2(0, 16, 16, 16), Rect2(32, 0, 16, 32), Rect2(48, 0, 16, 32)]
+		#var etapes_position_y_arr = [8,8,8,0,0]
+		
 		var i = 0
-		for etape in etapes_sprites_arr:
+		for etape in item["etapes_sprites_arr"]:
 
-			$Sprite2D.texture.region = etape
-			$Sprite2D.position.y = etapes_position_y_arr[i]
+			icon_sprite.texture.region = Rect2(Vector2(etape[0], etape[1]), Vector2(etape[2], etape[3]))
+			icon_sprite.position.y = item["etapes_position_y_arr"][i]
 			i += 1
-			await get_tree().create_timer(1.0).timeout
+			await get_tree().create_timer(item["time_for_steps"]).timeout
 		
 		ramassable = true
 
@@ -103,6 +104,9 @@ func pickup_item():
 		#body.interact_ui.visible = false
 
 
+func _process(_delta):
+	pass
+
 func _on_area_2d_mouse_entered():
 	#player_in_range = true
 	Global.interaction_ui.visible = true
@@ -125,7 +129,7 @@ func _on_area_2d_mouse_exited():
 
 
 func _on_area_2d_input_event(viewport, event, shape_idx):
-	if  event is InputEventMouseButton and event.pressed and event.button_index == 2:
+	if event is InputEventMouseButton and event.pressed and event.button_index == 2:
 		if self.is_in_group("seeds") and ramassable:
 			Global.remove_seed_tile_at_cursor()
 			Global.can_plante = true

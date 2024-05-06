@@ -1,5 +1,7 @@
 extends Node
 
+
+# Liste des objets possibles de l'inventaire
 var objets = [
   {
 	"name": "Graine de Carottes",
@@ -12,6 +14,8 @@ var objets = [
 	"final_object": "carotte",
 	"grow_texture": "res://Sprites/carottes.png",
 	"icon": "res://Sprites/icon_carottes.png",
+	"etapes_sprites_arr": [[16, 0, 16, 16], [64, 0, 16, 16], [0, 16, 16, 16], [32, 0, 16, 32], [48, 0, 16, 32]],
+	"etapes_position_y_arr": [8,8,8,0,0],
 	"effect": "rien",
 	"type" : "food",
 	"quantity": 1
