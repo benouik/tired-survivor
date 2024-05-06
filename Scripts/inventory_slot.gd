@@ -9,7 +9,7 @@ extends Control
 @onready var item_effect = $DetailsPanel/ItemEffect
 @onready var usage_panel = $UsagePanel
 @onready var outer_border = $OuterBorder
-@onready var sprite = $Sprite2D
+#@onready var sprite = $Sprite2D
 
 # L'objet que contient le Slot
 var item = null

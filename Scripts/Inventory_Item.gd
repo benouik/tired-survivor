@@ -67,7 +67,7 @@ func _ready():
 
 # Add item to inventory
 func pickup_item():
-	
+	var pickup_object
 	#var item = {
 		#"quantity": 1,
 		#"name": item["name"],
@@ -75,10 +75,18 @@ func pickup_item():
 		#"texture": load(item["icon"]), #item_texture,
 		#"scene_path": scene_path
 	#}
-	if Global.player_node:
 		
+	
+	
+	if self.is_in_group("seeds"):
+		if ramassable:
+			pickup_object = item["final_object"]
+		else:
+			pickup_object = item["id"]
+			
+	if Global.player_node:
 		for i in range(Objets.objets.size()):
-			if Objets.objets[i]["id"] == item["final_object"]:
+			if Objets.objets[i]["id"] == pickup_object:
 				item = Objets.objets[i]
 		
 		Global.add_item(item)
@@ -128,14 +136,13 @@ func _on_area_2d_mouse_exited():
 
 
 
-func _on_area_2d_input_event(viewport, event, shape_idx):
+func _on_area_2d_input_event(_viewport, event, _shape_idx):
 	if event is InputEventMouseButton and event.pressed and event.button_index == 2:
-		if self.is_in_group("seeds") and ramassable:
+		if self.is_in_group("seeds"):
 			Global.remove_seed_tile_at_cursor()
 			Global.can_plante = true
 		#print(event.button_index)
 		#print("lol it works")
-		if ramassable:
-			pickup_item()
-			Global.interaction_ui.visible = false
-			Global.interaction_label.visible = false
+		pickup_item()
+		Global.interaction_ui.visible = false
+		Global.interaction_label.visible = false
