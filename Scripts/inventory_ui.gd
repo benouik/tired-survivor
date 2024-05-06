@@ -12,19 +12,22 @@ func _ready():
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	pass
 
 func _on_inventory_updated():
 	clear_grid_container()
 	
-	for i in range(4, Global.inventory.size() -3):
+	for i in range(Global.inventory.size()):
 		var item = Global.inventory[i]
 		var slot = Global.inventory_slot_scene.instantiate()
 		
 		slot.drag_start.connect(_on_drag_start)
 		slot.drag_end.connect(_on_drag_end)
-		grid_container.add_child(slot)
+		if i < 5:
+			$HBoxContainer.add_child(slot)
+		else:
+			grid_container.add_child(slot)
 		
 		slot.set_slot_index(i)
 		
@@ -39,12 +42,16 @@ func clear_grid_container():
 		var child = grid_container.get_child(0)
 		grid_container.remove_child(child)
 		child.queue_free()
-
+	while $HBoxContainer.get_child_count() > 0:
+		var child = $HBoxContainer.get_child(0)
+		$HBoxContainer.remove_child(child)
+		child.queue_free()
+		
 # Get the current mouse position in the grid_container's coordinate system
 func get_slot_under_mouse() -> Control:
 	var mouse_position = get_global_mouse_position()
 	for slot in grid_container.get_children():
-		var slot_rect = Rect2(slot.global_position, slot.size)
+		var slot_rect = Rect2(slot.global_position, Vector2(80, 80))
 		if slot_rect.has_point(mouse_position):
 			return slot
 	return null
@@ -79,3 +86,5 @@ func _on_drag_end():
 	if target_slot and dragged_slot != target_slot:
 		drop_slot(dragged_slot, target_slot)
 	dragged_slot = null
+
+

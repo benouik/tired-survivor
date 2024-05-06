@@ -28,7 +28,7 @@ func _ready():
 
 	#item_name = ["Fraise", "Melon", "Cerise"].pick_random()
 	#item_effect = ["Sante", "Vitesse", "Energie"].pick_random()
-	print(Objets.objets)
+	#print(Objets.objets)
 	print("item id: " + id)
 	
 	for i in range(Objets.objets.size()):
@@ -122,7 +122,7 @@ func _on_area_2d_mouse_exited():
 
 
 
-func _on_area_2d_input_event(viewport, event, shape_idx):
+func _on_area_2d_input_event(_viewport, event, _shape_idx):
 	if  event is InputEventMouseButton and event.pressed and event.button_index == 2:
 		if self.is_in_group("seeds") and ramassable:
 			Global.remove_seed_tile_at_cursor()

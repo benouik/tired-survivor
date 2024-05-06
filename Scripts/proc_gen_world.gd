@@ -20,7 +20,6 @@ var noise_values = []
 
 var width :int = 200
 var height :int = 200
-
 var water_layer :int = 0
 var beach_layer :int = 1
 var beach_flower_layer: int = 2
@@ -247,7 +246,7 @@ func _input(_event):
 		var mouse_pos :Vector2 = get_global_mouse_position()
 		var tile_mouse_pos :Vector2i = tile_map.local_to_map(mouse_pos)
 
-		var interaction_present = tile_map.get_cell_tile_data(interaction_layer, tile_mouse_pos)
+		var _interaction_present = tile_map.get_cell_tile_data(interaction_layer, tile_mouse_pos)
 		
 		#if Global.item_to_pickup != Node2D and last_action == "":
 			#Global.item_to_pickup.pickup_item()
@@ -308,10 +307,7 @@ func retrieving_custom_data(tile_mouse_pos, custom_data_layer, layer):
 
 
 
-func handle_seed2(tile_mouse_pos, level, atlas_coords, final_seed_level):
-	pass
-
-func handle_seed(tile_mouse_pos, level, atlas_coords, final_seed_level):
+func handle_seed(tile_mouse_pos, _level, _atlas_coords, _final_seed_level):
 	if Global.can_plante:
 		Global.can_plante = false
 		var fruit = fruit_scene.instantiate()

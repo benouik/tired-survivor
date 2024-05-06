@@ -77,7 +77,7 @@ func set_player_reference(player):
 	#print(interaction_ui)
 
 # Adds an item to the inventory, returns true if successful
-func add_item(item, to_hotbar=false):
+func add_item(item, _to_hotbar=false):
 	
 	var added_to_hotbar = false
 

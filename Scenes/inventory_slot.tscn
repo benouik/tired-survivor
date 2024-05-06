@@ -10,6 +10,8 @@
 process_mode = 3
 layout_mode = 3
 anchors_preset = 0
+offset_right = 80.0
+offset_bottom = 80.0
 script = ExtResource("1_eqg1n")
 
 [node name="OuterBorder" type="ColorRect" parent="."]

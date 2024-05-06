@@ -35,7 +35,7 @@ var tile_pos: Vector2i
 
 #@onready var interaction_ui = $InteractionUI
 @onready var animations = $AnimationPlayer
-@onready var inventory_ui = $InventoryUI
+@onready var inventory_ui = $InventoryUI/Inventory_UI/GridContainer  # $InventoryUI
 #@onready var inventory_ui = $InventoryUI/ColorRect/Inventory_UI/GridContainer
 
 @onready var hotbar = $Hotbar
@@ -729,9 +729,9 @@ polygon = PackedVector2Array(2, 2, 3, 0, 2, -2, 0, -3, -2, -2, -3, 0, -2, 2, 0, 
 one_shot = true
 
 [node name="InventoryUI" type="CanvasLayer" parent="."]
-visible = false
 
 [node name="ColorRect" type="ColorRect" parent="InventoryUI"]
+visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -742,9 +742,10 @@ offset_bottom = -160.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
-color = Color(0.388235, 0.47451, 0.466667, 1)
+color = Color(0.388235, 0.47451, 0.466667, 0)
 
 [node name="Label" type="Label" parent="InventoryUI/ColorRect"]
+visible = false
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -759,12 +760,17 @@ theme_override_fonts/font = ExtResource("8_p2uvx")
 theme_override_font_sizes/font_size = 60
 text = "Inventory"
 
-[node name="Inventory_UI" parent="InventoryUI/ColorRect" instance=ExtResource("9_4q5lt")]
-layout_mode = 1
+[node name="Inventory_UI" parent="InventoryUI" instance=ExtResource("9_4q5lt")]
+offset_left = 240.0
+offset_top = 60.0
+offset_right = 240.0
+offset_bottom = 60.0
 
 [node name="Hotbar" type="CanvasLayer" parent="."]
+visible = false
 
 [node name="Hotbar" parent="Hotbar" instance=ExtResource("10_4op6l")]
+visible = true
 
 [connection signal="timeout" from="TimerCoinCooldown" to="." method="_on_timer_coin_cooldown_timeout"]
 [connection signal="timeout" from="TimerDeath" to="." method="_on_timer_death_timeout"]

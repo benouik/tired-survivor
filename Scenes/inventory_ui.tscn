@@ -12,6 +12,7 @@ grow_vertical = 2
 script = ExtResource("1_to0cg")
 
 [node name="GridContainer" type="GridContainer" parent="."]
+visible = false
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 1
 anchors_preset = 15
@@ -27,4 +28,18 @@ theme_override_constants/h_separation = 100
 theme_override_constants/v_separation = 100
 columns = 8
 
-[connection signal="gui_input" from="GridContainer" to="." method="_on_grid_container_gui_input"]
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -100.0
+offset_right = 40.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 100

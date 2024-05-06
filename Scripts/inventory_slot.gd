@@ -28,8 +28,8 @@ func _on_item_button_mouse_entered():
 		detail_panel.visible = true
 	#print("Mouse entrée")
 
-func block(item):
-	if item != self:
+func block(item_to_block):
+	if item_to_block != self:
 		blocked = !blocked
 	
 		if blocked:
