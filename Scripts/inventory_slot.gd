@@ -9,14 +9,16 @@ extends Control
 @onready var item_effect = $DetailsPanel/ItemEffect
 @onready var usage_panel = $UsagePanel
 @onready var outer_border = $OuterBorder
-
+@onready var sprite = $Sprite2D
 
 
 var item = null
 var blocked: bool = false
 var slot_index: int
+#var dragged = false
+#var old_position
 
-signal drag_start(slot) 
+signal drag_start(slot)
 signal drag_end()
 
 func set_slot_index(new_index):
@@ -66,12 +68,17 @@ func set_item(new_item):
 		item_effect.text = ""
 
 
+#func _process(_delta):
+	#if dragged and icon.texture != null:
+		#$Icon.position = get_local_mouse_position()
+		
+
 func _on_item_button_gui_input(event):
 	if event is InputEventMouseButton:
 		#print(event.button_index)
-		if event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
-			if item != null:
-				usage_panel.visible = !usage_panel.visible
+		#if event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
+			#if item != null:
+				#usage_panel.visible = !usage_panel.visible
 		# Handle right mouse button for drag
 		if event.button_index == MOUSE_BUTTON_RIGHT:
 			if event.pressed:

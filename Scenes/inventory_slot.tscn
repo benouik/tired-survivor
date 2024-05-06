@@ -10,6 +10,8 @@
 process_mode = 3
 layout_mode = 3
 anchors_preset = 0
+offset_right = 80.0
+offset_bottom = 80.0
 script = ExtResource("1_eqg1n")
 
 [node name="OuterBorder" type="ColorRect" parent="."]
@@ -27,7 +29,7 @@ offset_bottom = 75.0
 color = Color(0.509286, 0.509286, 0.509286, 1)
 
 [node name="ItemIcon" type="Sprite2D" parent="InnerBorder"]
-position = Vector2(45, 45)
+position = Vector2(40, 40)
 scale = Vector2(4, 4)
 texture = ExtResource("2_qu612")
 region_rect = Rect2(64, 16, 16, 16)

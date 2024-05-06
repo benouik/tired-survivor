@@ -9,6 +9,8 @@ var interaction_label: Label = null
 
 var cursor_active: bool = false
 var tile_map: TileMap
+var inventory_ui : Control
+var hotbar_ui :Control
 # Inventory items
 var inventory = []
 var hotbar_size = 5
@@ -29,7 +31,7 @@ var tool_on_hand = null
 
 func _ready(): 
 	# Initializes the inventory with 30 slots (spread over 9 blocks per row)
-	inventory.resize(24)
+	inventory.resize(29)
 	hotbar.resize(hotbar_size)
 	
 func add_to_hotbar(inv_id):
@@ -58,8 +60,56 @@ func remove_seed_tile_at_cursor():
 	tile_map.erase_cell(world.interaction_layer , tile_mouse_pos)
 	
 	
+func get_slot_under_mouse() -> Control:
+	#var mouse_position = world.world.get_global_mouse_position()
+	var mouse_position = inventory_ui.get_global_mouse_position()
+	
+	print(mouse_position)
+	for slot in inventory_ui.get_children():
+		var slot_rect = Rect2(slot.global_position, Vector2(80, 80))
+		print(slot_rect)
+		if slot_rect.has_point(mouse_position):
+			return slot
+	mouse_position = hotbar_ui.get_global_mouse_position()
+	for slot in hotbar_ui.get_children():
+		var slot_rect = Rect2(slot.global_position, Vector2(80, 80))
+		#print(slot_rect)
+		if slot_rect.has_point(mouse_position):
+			return slot
+	return null
+	
+func drop_slot(slot1: Control, slot2: Control):
+	var slot1_index = get_slot_index(slot1)
+	var slot2_index = get_slot_index(slot2)
+	if slot1_index == -1 or slot2_index == -1:
+		return  
+	else:
+		if swap_inventory_items(slot1_index, slot2_index):
+			inventory_updated.emit()
+			print("Dropping slots:", slot1_index, slot2_index)
+			
+# Find the index of a slot
+func get_slot_index(slot: Control) -> int:
+	for i in range(inventory_ui.get_child_count()):
+		if inventory_ui.get_child(i) == slot:
+			# Valid slot
+			return i +5
+	for i in range(hotbar_ui.get_child_count()):
+		if hotbar_ui.get_child(i) == slot:
+			# Valid slot
+			return i
+	# Invalid slot
+	return -1
+	
+
 func set_tile_map(map):
 	tile_map = map
+	
+func set_inventory_ui(ui):
+	inventory_ui = ui
+
+func set_hotbar_ui(ui):
+	hotbar_ui = ui
 	
 func set_world(wrld):
 	world = wrld

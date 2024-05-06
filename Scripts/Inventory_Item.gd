@@ -14,6 +14,8 @@ var scene_path: String = "res://Scenes/Inventory_Item.tscn"
 #@onready var icon_texture = $Icon.texture
 # Scene-Tree Node references
 @onready var icon_sprite = $Sprite2D
+
+
 var id = ""
 
 # Variables

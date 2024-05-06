@@ -7,6 +7,7 @@ var dragged_slot = null
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	Global.set_hotbar_ui(hotbar_container)
 	Global.inventory_updated.connect(_update_hotbar_ui)
 	_update_hotbar_ui()
 
@@ -37,13 +38,13 @@ func clear_hotbar_container():
 		child.queue_free()
 		
 		
-func get_slot_under_mouse() -> Control:
-	var mouse_position = get_global_mouse_position()
-	for slot in hotbar_container.get_children():
-		var slot_rect = Rect2(slot.global_position, slot.size)
-		if slot_rect.has_point(mouse_position):
-			return slot
-	return null
+#func get_slot_under_mouse() -> Control:
+	#var mouse_position = get_global_mouse_position()
+	#for slot in hotbar_container.get_children():
+		#var slot_rect = Rect2(slot.global_position, slot.size)
+		#if slot_rect.has_point(mouse_position):
+			#return slot
+	#return null
 # Drop slots
 
 func drop_slot(slot1: Control, slot2: Control):
@@ -71,7 +72,7 @@ func _on_drag_start(slot_control: Control):
 
 # Drops slot at new location
 func _on_drag_end():
-	var target_slot = get_slot_under_mouse()
+	var target_slot = Global.get_slot_under_mouse()
 	if target_slot and dragged_slot != target_slot:
-		drop_slot(dragged_slot, target_slot)
+		Global.drop_slot(dragged_slot, target_slot)
 	dragged_slot = null

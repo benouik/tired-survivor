@@ -7,6 +7,7 @@ var dragged_slot = null
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	Global.set_inventory_ui(grid_container)
 	Global.inventory_updated.connect(_on_inventory_updated)
 	_on_inventory_updated()
 
@@ -18,7 +19,7 @@ func _process(delta):
 func _on_inventory_updated():
 	clear_grid_container()
 	
-	for i in range(4, Global.inventory.size() -3):
+	for i in range(5, Global.inventory.size()):
 		var item = Global.inventory[i]
 		var slot = Global.inventory_slot_scene.instantiate()
 		
@@ -40,15 +41,16 @@ func clear_grid_container():
 		grid_container.remove_child(child)
 		child.queue_free()
 
+
 # Get the current mouse position in the grid_container's coordinate system
-func get_slot_under_mouse() -> Control:
-	var mouse_position = get_global_mouse_position()
-	for slot in grid_container.get_children():
-		var slot_rect = Rect2(slot.global_position, slot.size)
-		if slot_rect.has_point(mouse_position):
-			return slot
-	return null
-# Drop slots
+#func get_slot_under_mouse() -> Control:
+	#var mouse_position = get_global_mouse_position()
+	#for slot in grid_container.get_children():
+		#var slot_rect = Rect2(slot.global_position, slot.size)
+		#if slot_rect.has_point(mouse_position):
+			#return slot
+	#return null
+## Drop slots
 
 func drop_slot(slot1: Control, slot2: Control):
 	var slot1_index = get_slot_index(slot1)
@@ -75,7 +77,7 @@ func _on_drag_start(slot_control: Control):
 
 # Drops slot at new location
 func _on_drag_end():
-	var target_slot = get_slot_under_mouse()
+	var target_slot = Global.get_slot_under_mouse()
 	if target_slot and dragged_slot != target_slot:
-		drop_slot(dragged_slot, target_slot)
+		Global.drop_slot(dragged_slot, target_slot)
 	dragged_slot = null
