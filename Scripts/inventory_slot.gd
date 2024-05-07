@@ -9,12 +9,14 @@ extends Control
 @onready var item_effect = $DetailsPanel/ItemEffect
 @onready var usage_panel = $UsagePanel
 @onready var outer_border = $OuterBorder
-@onready var sprite = $Sprite2D
+#@onready var sprite = $Sprite2D
 
 # L'objet que contient le Slot
 var item = null
 # L'index de l'inventaire lié à ce slot
 var slot_index: int
+# Le slot est sélectionné
+var slot_is_active = false
 
 # Appelé quand on clique droite sur le Slot, ou qu'on relache
 signal drag_start(slot)
@@ -49,27 +51,34 @@ func _on_item_button_mouse_exited():
 
 # Si on clique sur le slot on affiche le menu
 func _on_item_button_pressed():
-	if item != null:
-		usage_panel.visible = !usage_panel.visible
+	if slot_index < 5:
+		Global.set_item_in_hand(slot_index)
+	#if item != null:
+		#usage_panel.visible = !usage_panel.visible
 		#get_tree().call_group("inventory_slots", "block", self)
 
 # Si le slot ne contient pas d'objet, pas d'icone ni d'indication de quantité
 func set_empty():
 	icon.texture = null
 	quantity_label.text = ""
-	
+	if slot_is_active:
+		outer_border.color = "8625fe"
+		
 # On attribue les élements d'interface à partir des valeurs de l'objet
 func set_item(new_item):
-	item = new_item
+	item = new_item["object"]
 	icon.texture = load(item["icon"])
 	#icon.texture.region = Rect2(64, 16, 16, 16)
-	quantity_label.text = str(item["quantity"])
+	quantity_label.text = str(new_item["quantity"])
 	item_name.text = str(item["name"])
 	item_type.text = str(item["type"])
 	if item["effect"] != "":
 		item_effect.text = str(item["effect"])
 	else:
 		item_effect.text = ""
+		
+	if slot_is_active:
+		outer_border.color = "8625fe"
 
 
 # Si on clique sur le slot

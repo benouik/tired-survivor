@@ -125,3 +125,5 @@ layer_7/tile_data = PackedInt32Array()
 layer_8/name = "cursor"
 layer_8/z_index = 10
 layer_8/tile_data = PackedInt32Array()
+
+[node name="Line2D" type="Line2D" parent="."]

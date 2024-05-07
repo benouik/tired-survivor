@@ -165,16 +165,24 @@ func updateAnimation():
 
 
 func _input(_event):
-	if Input.is_action_just_pressed("zoom_in"):
-		var zoom_val = min($Camera2D.zoom.x + 0.1, max_zoom)
-		$Camera2D.zoom = Vector2(zoom_val, zoom_val)
-	if Input.is_action_just_pressed("zoom_out"):
-		var zoom_val = max($Camera2D.zoom.x - 0.1, min_zoom)
-		$Camera2D.zoom = Vector2(zoom_val, zoom_val)
+	
+	for i in range(0, 4):
+		if Input.is_action_just_pressed("ui_" + str(i+1)):
+			Global.set_item_in_hand(i)
+
+		
+	var _item_in_hand = 1
+	
+	#if Input.is_action_just_pressed("zoom_in"):
+		#var zoom_val = min($Camera2D.zoom.x + 0.1, max_zoom)
+		#$Camera2D.zoom = Vector2(zoom_val, zoom_val)
+	#if Input.is_action_just_pressed("zoom_out"):
+		#var zoom_val = max($Camera2D.zoom.x - 0.1, min_zoom)
+		#$Camera2D.zoom = Vector2(zoom_val, zoom_val)
 		
 	if Input.is_action_just_pressed("inventory"):
 		inventory_ui.visible = !inventory_ui.visible
-		hotbar.visible = !hotbar.visible
+		#hotbar.visible = !hotbar.visible
 		get_tree().paused = !get_tree().paused
 		
 		

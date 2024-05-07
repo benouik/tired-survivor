@@ -30,9 +30,12 @@ func _update_hotbar_ui():
 		# On assigne à chaque slot un index qui est celui de sa place dans l'inventaire
 		slot.set_slot_index(i)
 		
+		if Global.item_in_hand == i:
+			slot.slot_is_active = true
+		
 		# Si l'inventaire est vide pour cette index on crée un slot vide, sinon on y attribue l'objet de l'inventaire
 		if Global.inventory[i] != null:
-			slot.set_item(Global.inventory[i]["object"])
+			slot.set_item(Global.inventory[i])
 		else:
 			slot.set_empty()
 

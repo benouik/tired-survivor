@@ -1,0 +1,34 @@
+[gd_scene load_steps=7 format=3 uid="uid://chin4xvguns3n"]
+
+[ext_resource type="Script" path="res://Scripts/Tree.gd" id="1_jliti"]
+[ext_resource type="Shader" path="res://Shaders/tree.gdshader" id="2_n2ngn"]
+[ext_resource type="Texture2D" uid="uid://cflhlnpe2ylw5" path="res://Assets/16x16/CL_Crops_Mining.png" id="2_ok385"]
+[ext_resource type="PackedScene" uid="uid://sr8q8qmd4a6t" path="res://Scenes/tree_explosion.tscn" id="2_yfu6e"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0gon5"]
+shader = ExtResource("2_n2ngn")
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_s2vx0"]
+radius = 8.0
+
+[node name="Tree" type="StaticBody2D" groups=["trees"]]
+collision_layer = 8
+collision_mask = 8
+script = ExtResource("1_jliti")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+y_sort_enabled = true
+material = SubResource("ShaderMaterial_0gon5")
+position = Vector2(0, -20)
+texture = ExtResource("2_ok385")
+region_enabled = true
+region_rect = Rect2(128, 384, 48, 80)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 12)
+shape = SubResource("CircleShape2D_s2vx0")
+
+[node name="GPUParticles2D" parent="." instance=ExtResource("2_yfu6e")]
+position = Vector2(0, 10)
+emitting = false
+one_shot = true

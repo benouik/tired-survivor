@@ -9,12 +9,17 @@ extends Node2D
 
 @export var fruit_scene: PackedScene
 
+@export var tree_scene :PackedScene = preload("res://Scenes/tree.tscn")
+
 var noise: Noise
 var tree_noise: Noise
 var flower_noise: Noise
-
+var next_action_time = 0
 var last_action = ""
 var noise_values = []
+
+var action_cooldown = false
+var action_cooldown_time = 0.1
 
 @onready var tile_map :TileMap = $TileMap2
 
@@ -196,6 +201,16 @@ func generate_world():
 							var player = player_scene.instantiate()
 							player.position = Vector2i(x*16, y*16)
 							add_child(player)
+
+							var fruit = fruit_scene.instantiate()
+							var ids = ["carotte_plant"] # , "weat_plant"]
+							fruit.id = ids.pick_random()
+							fruit.position = Vector2i(x*16 +32, y*16 +32)
+							add_child(fruit)
+							fruit = fruit_scene.instantiate()
+							fruit.id = ids.pick_random()
+							fruit.position = Vector2i(x*16 -32, y*16 -32)
+							add_child(fruit)
 							
 						#tile_map.set_cell(ground_2_layer, Vector2i(x, y), source_id, grass_atlas_arr.pick_random())
 						if flower_noise_value > 0.5:
@@ -220,34 +235,38 @@ func place_tree(pos):
 		if get_distance(pos, tree_pos) < 5:
 			return false
 			#tile_map.set_cell(env_layer, Vector2i(x, y), source_id, oak_tree_atlas.pick_random())
-	tile_map.set_cell(tree_layer, pos, source_id, oak_tree_atlas.pick_random())
-	tree_positions.append(pos)
+	#tile_map.set_cell(tree_layer, pos, source_id, oak_tree_atlas.pick_random())
+	var tree = tree_scene.instantiate()
+	tree.position = Vector2(pos.x * 16 -8, pos.y *16 -4)
+	add_child(tree)
 	return true
 
 	
 func _input(_event):
 	if Input.is_action_just_pressed("toggle_dirt"):
 		#farming_mode_state = FARMING_MODES.DIRT
-		Global.tool_on_hand = "houe"
+		Global.item_in_hand = 0
 		#print("dirt")
 	if Input.is_action_just_pressed("toggle_seeds"):
 		#print("seeds")
 		#farming_mode_state = FARMING_MODES.SEEDS
-		Global.tool_on_hand = "seed"
+		Global.item_in_hand = 1
 		
 	if Input.is_action_just_released("click"):
 		last_action = ""
-		print("none")
+		action_cooldown = true
+		await get_tree().create_timer(action_cooldown_time).timeout
+		action_cooldown = false
 		
-	if Input.is_action_just_pressed("click") and cursor_active:
+	elif Input.is_action_just_pressed("click") and cursor_active and not action_cooldown:
 		
-		var tool_on_hand = Global.tool_on_hand
+		var _tool_on_hand :int = Global.item_in_hand
 
 		
 		var mouse_pos :Vector2 = get_global_mouse_position()
 		var tile_mouse_pos :Vector2i = tile_map.local_to_map(mouse_pos)
 
-		var interaction_present = tile_map.get_cell_tile_data(interaction_layer, tile_mouse_pos)
+		var _interaction_present = tile_map.get_cell_tile_data(interaction_layer, tile_mouse_pos)
 		
 		#if Global.item_to_pickup != Node2D and last_action == "":
 			#Global.item_to_pickup.pickup_item()
@@ -268,37 +287,67 @@ func _input(_event):
 			add_child(feu_de_camp)
 			campement_placed = true
 		
-		elif not retrieving_custom_data(tile_mouse_pos, growing_custom_data, interaction_layer):
+		#elif not retrieving_custom_data(tile_mouse_pos, growing_custom_data, interaction_layer):
 			
 			#if retrieving_custom_data(tile_mouse_pos, can_recolte_custom_data, interaction_layer):
 				#tile_map.erase_cell(interaction_layer, tile_mouse_pos)
 				#$Player.say("Miam !")
+				
+				
+		var now = Time.get_ticks_msec()
+		
+		if now >= next_action_time:
+				
+				
+			var object = Global.inventory[Global.item_in_hand]
 			
 			
+			next_action_time = now + 250
 			
-			if tool_on_hand == "seed": # farming_mode_state == FARMING_MODES.SEEDS and not interaction_present and Global.item_to_pickup == Node2D:
-				if last_action == "seeds" or last_action == "":
-					last_action = "seeds"
-					print("seeds")
+			if object != null:
+				
+				object = Global.inventory[Global.item_in_hand]["object"]
+				
+				if object["use"] == "plant":
+					# On vérifie si il y a une Tile de Dirt
+					var data = tile_map.get_cell_tile_data(dirt_layer, tile_mouse_pos)
 					
-					var atlas_coord = [Vector2i(23, 10), Vector2i(26, 10), Vector2i(22, 11), Vector2i(23, 11), Vector2i(24, 10), Vector2i(25, 10)]
-					if retrieving_custom_data(tile_mouse_pos, can_place_seeds_custom_data, dirt_layer):
-						var level :int = 0
-						var final_seed_level :int = 4
-						handle_seed(tile_mouse_pos, level, atlas_coord, final_seed_level)
+					if data:
+						#on_grass = true
+						#await get_tree().create_timer(0.1).timeout
+						if Global.can_plant():
+							last_action = "seeds"
+							var seeds = object["id"]
+							handle_seed(tile_mouse_pos,seeds)
+							Global.update_item_quantity(Global.item_in_hand, -1)
+						else:
+							Global.can_plante = true
+						
+						
+				elif object["use"] == "consommer":
+					Global.player_node.speed += 100
+					Global.update_item_quantity(Global.item_in_hand, -1)
 					
-			elif tool_on_hand == "houe": # farming_mode_state == FARMING_MODES.DIRT and not interaction_present and Global.item_to_pickup == Node2D:
-				if last_action == "dirt" or last_action == "":
-					last_action = "dirt"
-					print("dirt")
+				elif object["use"] == "dirt": # farming_mode_state == FARMING_MODES.DIRT and not interaction_present and Global.item_to_pickup == Node2D:
+					#if last_action == "dirt" or last_action == "":
+						#last_action = "dirt"
+						#print("dirt")
+					var data = tile_map.get_cell_tile_data(dirt_layer, tile_mouse_pos)
 					
-					if retrieving_custom_data(tile_mouse_pos, can_place_dirt_custom_data, grass_layer):
-						dirt_tiles.append(tile_mouse_pos)
-						#tile_map.erase_cell(grass_layer, tile_mouse_pos)
-						tile_map.set_cells_terrain_connect(dirt_layer, dirt_tiles, 3, 0)
-	#print("Max: ", noise_values.max(), "  Min: ", noise_values.min())
-	
-	
+					if not data:
+						if retrieving_custom_data(tile_mouse_pos, can_place_dirt_custom_data, grass_layer):
+							dirt_tiles.append(tile_mouse_pos)
+							#tile_map.erase_cell(grass_layer, tile_mouse_pos)
+							tile_map.set_cells_terrain_connect(dirt_layer, dirt_tiles, 3, 0)
+			#print("Max: ", noise_values.max(), "  Min: ", noise_values.min())
+			
+				elif object["use"] == "cut_tree":
+					if Global.can_cut_tree():
+						Global.hit_tree()
+						
+		
+
+
 func retrieving_custom_data(tile_mouse_pos, custom_data_layer, layer):
 	var tile_data :TileData = tile_map.get_cell_tile_data(layer, tile_mouse_pos)
 	if tile_data:
@@ -307,15 +356,13 @@ func retrieving_custom_data(tile_mouse_pos, custom_data_layer, layer):
 		return false
 
 
-
-func handle_seed2(tile_mouse_pos, level, atlas_coords, final_seed_level):
-	pass
-
-func handle_seed(tile_mouse_pos, level, atlas_coords, final_seed_level):
-	if Global.can_plante:
-		Global.can_plante = false
+func handle_seed(tile_mouse_pos, seeds):
+	if Global.can_plant():
+		#Global.can_plante = false
 		var fruit = fruit_scene.instantiate()
-		fruit.id = "carotte_seeds"
+		
+		#var ids = ["carotte_plant", "weat_plant"]
+		fruit.id = seeds  # ids.pick_random()
 		#fruit.item_name = ["Fraise", "Melon", "Cerise"].pick_random()
 		#fruit.item_effect = ["Sante", "Vitesse", "Energie"].pick_random()
 		fruit.position = Vector2(tile_mouse_pos.x *16+8, tile_mouse_pos.y *16+8)
