@@ -17,7 +17,7 @@ var scene_path: String = "res://Scenes/Inventory_Item.tscn"
 
 
 var id = ""
-var objects_ready = false
+#var objects_ready = false
 
 # Variables
 var player_in_range = false
@@ -32,10 +32,10 @@ func _ready():
 	#print(Objets.objets)
 	print("item id: " + id)
 	
-	
-	while not objects_ready:
-		await get_tree().create_timer(0.5).timeout
-		
+	#
+	#while not objects_ready:
+		#await get_tree().create_timer(0.5).timeout
+		#
 	for i in range(Objets.objets.size()):
 		#print("id :" + str(id))
 		#print(Objets.objets[i]["id"])
@@ -127,7 +127,7 @@ func _on_area_2d_mouse_entered():
 	#player_in_range = true
 	Global.interaction_ui.visible = true
 	Global.interaction_label.visible = true
-	Global.interaction_label.text = self.item["name"]
+	Global.interaction_label.text = item["name"]
 	Global.can_plante = false
 	#Global.item_to_pickup = self
 	#print("entered")
@@ -146,7 +146,7 @@ func _on_area_2d_mouse_exited():
 
 func _on_area_2d_input_event(_viewport, event, _shape_idx):
 	if event is InputEventMouseButton:
-		var pos = Global.world.to_local(position)
+		var _pos = Global.world.to_local(position)
 		#print(pos)
 		if self.is_in_group("seeds"):
 			Global.can_plante = false

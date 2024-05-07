@@ -26,6 +26,7 @@ var world: Node2D
 
 var item_in_hand:int  = 0
 
+var objects_ready = false
 
 @onready var inventory_slot_scene = preload("res://Scenes/inventory_slot.tscn")
 
@@ -36,7 +37,10 @@ func _ready():
 	hotbar.resize(hotbar_size)
 	
 	var item
-
+	
+	while not objects_ready:
+		await get_tree().create_timer(0.5).timeout
+		
 	for i in range(Objets.objets.size()):
 		if Objets.objets[i]["id"] == "houe":
 			item = Objets.objets[i]

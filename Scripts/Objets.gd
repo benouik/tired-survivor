@@ -1,11 +1,14 @@
 extends Node
 
-var objects_ready = false
+var objets = []
 # Called when the node enters the scene tree for the first time.
+
 func _ready():
-	var objets = [
+	objets = [
 	  {
+		"name": "houe",
 		"icon": "res://Sprites/houe.png",
+		"id": "houe",
 		"effect": "rien",
 		"use": "dirt",
 		"type" : "tool",
@@ -119,5 +122,7 @@ func _ready():
 		"icon": "res://Sprites/icon_weat.png"
 	  }
 	]
-	for item in get_tree().get_nodes_in_group("inventory_item"):
-		item.objects_ready = true
+
+	#for item in get_tree().get_nodes_in_group("inventory_item"):
+		#item.objects_ready = true
+	Global.objects_ready = true

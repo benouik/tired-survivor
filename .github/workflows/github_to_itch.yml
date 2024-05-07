@@ -198,32 +198,32 @@ jobs:
       path: build/html5
 
  
- Publish:
-  needs: Release
-  if: ${{ contains(github.ref, 'main') }}
-  runs-on: ubuntu-latest
-  environment: env
-  steps:
-   - uses: actions/download-artifact@v4
-     with:
-      name: html_build
-      path: build/html5
+ # Publish:
+  # needs: Release
+  # if: ${{ contains(github.ref, 'main') }}
+  # runs-on: ubuntu-latest
+  # environment: env
+  # steps:
+   # - uses: actions/download-artifact@v4
+     # with:
+      # name: html_build
+      # path: build/html5
 
-   - shell: bash
-     env:
-       BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
-     run: |
-       curl -L -o butler.zip https://broth.itch.ovh/butler/linux-amd64/LATEST/archive/default
-       unzip butler.zip
-       chmod +x butler
-       ./butler push build/html5 turbob/tired-survivor:html5 
+   # - shell: bash
+     # env:
+       # BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+     # run: |
+       # curl -L -o butler.zip https://broth.itch.ovh/butler/linux-amd64/LATEST/archive/default
+       # unzip butler.zip
+       # chmod +x butler
+       # ./butler push build/html5 turbob/tired-survivor:html5 
   
   # - name: Login To Butler
       # run: ./butler login
     
 
  Cleanup:
-  needs: [Export, Release, Publish]
+  needs: [Export, Release]  # , Publish]
   runs-on: ubuntu-latest
   steps:
    - uses: geekyeggo/delete-artifact@v1
