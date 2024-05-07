@@ -16,6 +16,9 @@ var next_action_time = 0
 var last_action = ""
 var noise_values = []
 
+var action_cooldown = false
+var action_cooldown_time = 0.1
+
 @onready var tile_map :TileMap = $TileMap2
 
 var width :int = 200
@@ -247,9 +250,11 @@ func _input(_event):
 		
 	if Input.is_action_just_released("click"):
 		last_action = ""
-		print("none")
+		action_cooldown = true
+		await get_tree().create_timer(action_cooldown_time).timeout
+		action_cooldown = false
 		
-	if Input.is_action_just_pressed("click") and cursor_active:
+	elif Input.is_action_just_pressed("click") and cursor_active and not action_cooldown:
 		
 		var tool_on_hand :int = Global.item_in_hand
 
@@ -300,14 +305,19 @@ func _input(_event):
 				object = Global.inventory[Global.item_in_hand]["object"]
 				
 				if object["use"] == "plant":
-					await get_tree().create_timer(0.1).timeout
-					if Global.can_plante:
-						last_action = "seeds"
-						var seed = object["id"]
-						handle_seed(tile_mouse_pos,seed)
-						Global.update_item_quantity(Global.item_in_hand, -1)
-					else:
-						Global.can_plante = true
+					# On vérifie si il y a une Tile de Dirt
+					var data = tile_map.get_cell_tile_data(dirt_layer, tile_mouse_pos)
+					
+					if data:
+						#on_grass = true
+						#await get_tree().create_timer(0.1).timeout
+						if Global.can_plant():
+							last_action = "seeds"
+							var seed = object["id"]
+							handle_seed(tile_mouse_pos,seed)
+							Global.update_item_quantity(Global.item_in_hand, -1)
+						else:
+							Global.can_plante = true
 						
 						
 				elif object["use"] == "consommer":
@@ -315,17 +325,20 @@ func _input(_event):
 					Global.update_item_quantity(Global.item_in_hand, -1)
 					
 				elif object["use"] == "dirt": # farming_mode_state == FARMING_MODES.DIRT and not interaction_present and Global.item_to_pickup == Node2D:
-					if last_action == "dirt" or last_action == "":
-						last_action = "dirt"
+					#if last_action == "dirt" or last_action == "":
+						#last_action = "dirt"
 						#print("dirt")
-						
+					var data = tile_map.get_cell_tile_data(dirt_layer, tile_mouse_pos)
+					
+					if not data:
 						if retrieving_custom_data(tile_mouse_pos, can_place_dirt_custom_data, grass_layer):
 							dirt_tiles.append(tile_mouse_pos)
 							#tile_map.erase_cell(grass_layer, tile_mouse_pos)
 							tile_map.set_cells_terrain_connect(dirt_layer, dirt_tiles, 3, 0)
 			#print("Max: ", noise_values.max(), "  Min: ", noise_values.min())
 		
-		
+
+
 func retrieving_custom_data(tile_mouse_pos, custom_data_layer, layer):
 	var tile_data :TileData = tile_map.get_cell_tile_data(layer, tile_mouse_pos)
 	if tile_data:
@@ -335,8 +348,8 @@ func retrieving_custom_data(tile_mouse_pos, custom_data_layer, layer):
 
 
 func handle_seed(tile_mouse_pos, seed):
-	if Global.can_plante:
-		Global.can_plante = false
+	if Global.can_plant():
+		#Global.can_plante = false
 		var fruit = fruit_scene.instantiate()
 		
 		#var ids = ["carotte_plant", "weat_plant"]

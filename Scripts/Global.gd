@@ -36,7 +36,12 @@ func _ready():
 	hotbar.resize(hotbar_size)
 	
 	var item
-	
+
+	for i in range(Objets.objets.size()):
+		if Objets.objets[i]["id"] == "houe":
+			item = Objets.objets[i]
+			add_item(item)
+
 	for i in range(Objets.objets.size()):
 		if Objets.objets[i]["id"] == "carotte_plant":
 			item = Objets.objets[i]
@@ -47,7 +52,29 @@ func _ready():
 			item = Objets.objets[i]
 			add_item(item)
 	inventory_updated.emit()
+
+func cast_ray(start, target):
+	var space_state = world.get_world_2d().direct_space_state
+	# use global coordinates, not local to node
+	var query = PhysicsRayQueryParameters2D.create(start, target)
+	query.set_collision_mask(2|4)
+	query.exclude = [self]
+	query.collide_with_areas = true
+	query.hit_from_inside = true
 	
+	return space_state.intersect_ray(query)
+
+func can_plant():
+	var mouse_position :Vector2 = world.get_global_mouse_position()
+	var tile_mouse_pos :Vector2i = tile_map.local_to_map(mouse_position)
+	
+	print(mouse_position)
+	var data = cast_ray(Vector2(mouse_position.x -2, mouse_position.y -2), Vector2(mouse_position.x +2, mouse_position.y +2))
+	if data and data.collider.get_parent().is_in_group("seeds"):
+		print(data)
+		return false
+	return true
+	#print(data)
 
 func set_item_in_hand(i):
 	item_in_hand = i
@@ -166,13 +193,13 @@ func add_item(item, _to_hotbar=false):
 				#else:
 					#add_to_hotbar(i)
 				inventory_updated.emit()
-				print("Item updated", inventory)
+				#print("Item updated", inventory)
 				return true
 		for i in range(inventory.size()):
 			if inventory[i] == null:
 				inventory[i] = {"id": i, "object": item, "quantity": 1}
 				inventory_updated.emit()
-				print("Item added", inventory)
+				#print("Item added", inventory)
 				#if to_hotbar:
 				#add_to_hotbar(i)
 				inventory_updated.emit()

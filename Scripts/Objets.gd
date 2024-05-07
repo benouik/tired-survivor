@@ -3,6 +3,18 @@ extends Node
 
 # Liste des objets possibles de l'inventaire
 var objets = [
+ {
+	"name": "Houe",
+	"id": "houe",
+	"groups": [
+	  "tool"
+	],
+	"icon": "res://Sprites/houe.png",
+	"effect": "rien",
+	"use": "dirt",
+	"type" : "tool",
+	"quantity": 1
+  },
   {
 	"name": "Plant de Carottes",
 	"id": "carotte_plant",

@@ -138,18 +138,22 @@ func _on_area_2d_mouse_exited():
 		#Global.item_to_pickup = Node2D
 	Global.interaction_ui.visible = false
 	Global.interaction_label.visible = false
-	Global.can_plante = true
+	#Global.can_plante = true
 
 
 
 func _on_area_2d_input_event(_viewport, event, _shape_idx):
 	if event is InputEventMouseButton:
+		var pos = Global.world.to_local(position)
+		print(pos)
 		if self.is_in_group("seeds"):
 			Global.can_plante = false
+			#await get_tree().create_timer(0.3).timeout
+			#Global.can_plante = true
 		if event.pressed and event.button_index == 2:
 			if self.is_in_group("seeds"):
 				Global.remove_seed_tile_at_cursor()
-				Global.can_plante = true
+				#Global.can_plante = true
 		#print(event.button_index)
 		#print("lol it works")
 			pickup_item()
