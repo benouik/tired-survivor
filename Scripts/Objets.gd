@@ -18,6 +18,7 @@ var objets = [
 	"etapes_sprites_arr": [[16, 0, 16, 16], [64, 0, 16, 16], [0, 16, 16, 16], [32, 0, 16, 32], [48, 0, 16, 32]],
 	"etapes_position_y_arr": [8,8,8,0,0],
 	"effect": "rien",
+	"use": "plant",
 	"type" : "food",
 	"quantity": 1
   },
@@ -29,6 +30,7 @@ var objets = [
 	  "food"
 	],
 	"effect": "Aucun",
+	"use": "consommer",
 	"type": "legume",
 	"quantity": 1,
 	"icon": "res://Sprites/icon_carottes.png"
@@ -48,6 +50,7 @@ var objets = [
 	"etapes_sprites_arr": [[16, 0, 16, 16], [64, 0, 16, 16], [0, 16, 16, 16], [32, 0, 16, 32], [48, 0, 16, 32]],
 	"etapes_position_y_arr": [8,8,8,0,0],
 	"effect": "rien",
+	"use": "plant",
 	"type" : "food",
 	"quantity": 1
   },
@@ -59,6 +62,7 @@ var objets = [
 	  "food"
 	],
 	"effect": "Aucun",
+	"use": "consommer",
 	"type": "legume",
 	"quantity": 1,
 	"icon": "res://Sprites/icon_weat.png"

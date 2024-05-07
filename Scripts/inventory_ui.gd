@@ -36,7 +36,7 @@ func _on_inventory_updated():
 		
 		# Si l'inventaire est vide pour cette index on crée un slot vide, sinon on y attribue l'objet de l'inventaire
 		if item != null:
-			slot.set_item(item["object"])
+			slot.set_item(item)
 		else:
 			slot.set_empty()
 	

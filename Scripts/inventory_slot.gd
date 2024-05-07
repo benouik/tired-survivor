@@ -15,6 +15,8 @@ extends Control
 var item = null
 # L'index de l'inventaire lié à ce slot
 var slot_index: int
+# Le slot est sélectionné
+var slot_is_active = false
 
 # Appelé quand on clique droite sur le Slot, ou qu'on relache
 signal drag_start(slot)
@@ -57,19 +59,24 @@ func _on_item_button_pressed():
 func set_empty():
 	icon.texture = null
 	quantity_label.text = ""
-	
+	if slot_is_active:
+		outer_border.color = "8625fe"
+		
 # On attribue les élements d'interface à partir des valeurs de l'objet
 func set_item(new_item):
-	item = new_item
+	item = new_item["object"]
 	icon.texture = load(item["icon"])
 	#icon.texture.region = Rect2(64, 16, 16, 16)
-	quantity_label.text = str(item["quantity"])
+	quantity_label.text = str(new_item["quantity"])
 	item_name.text = str(item["name"])
 	item_type.text = str(item["type"])
 	if item["effect"] != "":
 		item_effect.text = str(item["effect"])
 	else:
 		item_effect.text = ""
+		
+	if slot_is_active:
+		outer_border.color = "8625fe"
 
 
 # Si on clique sur le slot

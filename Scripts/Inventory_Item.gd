@@ -77,12 +77,18 @@ func pickup_item():
 	#}
 		
 	
-	
+	var item2
 	if self.is_in_group("seeds"):
 		if ramassable:
 			pickup_object = item["final_object"]
-		else:
-			pickup_object = item["id"]
+			for i in range(Objets.objets.size()):
+				if Objets.objets[i]["id"] == pickup_object:
+					item2 = Objets.objets[i]
+			
+			Global.add_item(item2)
+			
+		#else:
+		pickup_object = item["id"]
 			
 	if Global.player_node:
 		for i in range(Objets.objets.size()):
@@ -137,12 +143,15 @@ func _on_area_2d_mouse_exited():
 
 
 func _on_area_2d_input_event(_viewport, event, _shape_idx):
-	if event is InputEventMouseButton and event.pressed and event.button_index == 2:
+	if event is InputEventMouseButton:
 		if self.is_in_group("seeds"):
-			Global.remove_seed_tile_at_cursor()
-			Global.can_plante = true
+			Global.can_plante = false
+		if event.pressed and event.button_index == 2:
+			if self.is_in_group("seeds"):
+				Global.remove_seed_tile_at_cursor()
+				Global.can_plante = true
 		#print(event.button_index)
 		#print("lol it works")
-		pickup_item()
-		Global.interaction_ui.visible = false
-		Global.interaction_label.visible = false
+			pickup_item()
+			Global.interaction_ui.visible = false
+			Global.interaction_label.visible = false

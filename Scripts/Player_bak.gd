@@ -166,10 +166,14 @@ func updateAnimation():
 
 func _input(_event):
 	
-	for i in range(0, 4):
-		if Input.is_action_just_pressed("ui_" + str(i+1)):
-			Global.set_item_in_hand(i)
-
+	
+	if Input.is_action_just_pressed("zoom_in"):
+		Global.item_in_hand = min(Global.item_in_hand +1, Global.hotbar.size())
+		print(Global.item_in_hand)
+	if Input.is_action_just_pressed("zoom_out"):
+		Global.item_in_hand = max(Global.item_in_hand -1, 0)
+		print(Global.item_in_hand)
+		
 		
 	var item_in_hand = 1
 	
@@ -182,7 +186,7 @@ func _input(_event):
 		
 	if Input.is_action_just_pressed("inventory"):
 		inventory_ui.visible = !inventory_ui.visible
-		#hotbar.visible = !hotbar.visible
+		hotbar.visible = !hotbar.visible
 		get_tree().paused = !get_tree().paused
 		
 		
