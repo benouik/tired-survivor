@@ -15,6 +15,49 @@ var objets = [
 	"type" : "tool",
 	"quantity": 1
   },
+{
+	"name": "Hache",
+	"id": "hache",
+	"groups": [
+	  "tool"
+	],
+	"icon": "res://Sprites/hache.png",
+	"effect": "rien",
+	"use": "cut_tree",
+	"type" : "tool",
+	"quantity": 1
+  },
+  {
+	"name": "Bois",
+	"id": "wood",
+	"groups": [
+	  "material"
+	],
+	"icon": "res://Sprites/wood.png",
+	"effect": "rien",
+	"use": "rien",
+	"type" : "material",
+	"quantity": 1
+  },
+{
+	"name": "Arbre",
+	"id": "arbre",
+	"groups": [
+	  "tree"
+	],
+	"grow_steps": 5,
+	"time_for_steps": 1,
+	"final_object": "carotte",
+	"seed": "carotte_seed",
+	"grow_texture": "res://Sprites/carottes.png",
+	"icon": "res://Sprites/carotte_seed.png",
+	"etapes_sprites_arr": [[16, 0, 16, 16], [64, 0, 16, 16], [0, 16, 16, 16], [32, 0, 16, 32], [48, 0, 16, 32]],
+	"etapes_position_y_arr": [8,8,8,0,0],
+	"effect": "rien",
+	"use": "plant",
+	"type" : "food",
+	"quantity": 1
+  },
   {
 	"name": "Plant de Carottes",
 	"id": "carotte_plant",

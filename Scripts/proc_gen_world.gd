@@ -9,6 +9,8 @@ extends Node2D
 
 @export var fruit_scene: PackedScene
 
+@export var tree_scene :PackedScene = preload("res://Scenes/tree.tscn")
+
 var noise: Noise
 var tree_noise: Noise
 var flower_noise: Noise
@@ -233,8 +235,10 @@ func place_tree(pos):
 		if get_distance(pos, tree_pos) < 5:
 			return false
 			#tile_map.set_cell(env_layer, Vector2i(x, y), source_id, oak_tree_atlas.pick_random())
-	tile_map.set_cell(tree_layer, pos, source_id, oak_tree_atlas.pick_random())
-	tree_positions.append(pos)
+	#tile_map.set_cell(tree_layer, pos, source_id, oak_tree_atlas.pick_random())
+	var tree = tree_scene.instantiate()
+	tree.position = Vector2(pos.x * 16 -8, pos.y *16 -4)
+	add_child(tree)
 	return true
 
 	
@@ -336,6 +340,11 @@ func _input(_event):
 							#tile_map.erase_cell(grass_layer, tile_mouse_pos)
 							tile_map.set_cells_terrain_connect(dirt_layer, dirt_tiles, 3, 0)
 			#print("Max: ", noise_values.max(), "  Min: ", noise_values.min())
+			
+				elif object["use"] == "cut_tree":
+					if Global.can_cut_tree():
+						Global.hit_tree()
+						
 		
 
 

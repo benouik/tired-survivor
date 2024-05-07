@@ -51,8 +51,10 @@ func _on_item_button_mouse_exited():
 
 # Si on clique sur le slot on affiche le menu
 func _on_item_button_pressed():
-	if item != null:
-		usage_panel.visible = !usage_panel.visible
+	if slot_index < 5:
+		Global.set_item_in_hand(slot_index)
+	#if item != null:
+		#usage_panel.visible = !usage_panel.visible
 		#get_tree().call_group("inventory_slots", "block", self)
 
 # Si le slot ne contient pas d'objet, pas d'icone ni d'indication de quantité

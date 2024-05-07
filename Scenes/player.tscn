@@ -272,10 +272,9 @@ _data = {
 
 [node name="Player" type="CharacterBody2D" groups=["Player"]]
 process_mode = 3
-z_index = 1
 y_sort_enabled = true
 collision_layer = 2
-collision_mask = 5
+collision_mask = 9
 platform_floor_layers = 4294967279
 script = ExtResource("1_08yuc")
 
@@ -291,14 +290,13 @@ position_smoothing_enabled = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 y_sort_enabled = true
-position = Vector2(0, -3.5)
 rotation = 1.5708
 shape = SubResource("CapsuleShape2D_c57br")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 y_sort_enabled = true
 material = SubResource("ShaderMaterial_xi4wo")
-position = Vector2(0, -16)
+position = Vector2(0, -12)
 texture = ExtResource("3_ew067")
 hframes = 24
 vframes = 4

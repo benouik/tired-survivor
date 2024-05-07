@@ -51,30 +51,58 @@ func _ready():
 		if Objets.objets[i]["id"] == "weat_plant":
 			item = Objets.objets[i]
 			add_item(item)
+	for i in range(Objets.objets.size()):
+		if Objets.objets[i]["id"] == "hache":
+			item = Objets.objets[i]
+			add_item(item)
 	inventory_updated.emit()
 
-func cast_ray(start, target):
+func cast_ray(start, target, mode):
 	var space_state = world.get_world_2d().direct_space_state
 	# use global coordinates, not local to node
 	var query = PhysicsRayQueryParameters2D.create(start, target)
-	query.set_collision_mask(2|4)
+	
+	if mode == "seed":
+		query.set_collision_mask(2|4)
+	elif mode == "tree":
+		query.set_collision_mask(3|8)
+		
 	query.exclude = [self]
-	query.collide_with_areas = true
+	#query.collide_with_areas = true
 	query.hit_from_inside = true
 	
 	return space_state.intersect_ray(query)
 
 func can_plant():
+	if not can_cut_tree():
+		var mouse_position :Vector2 = world.get_global_mouse_position()
+		var tile_mouse_pos :Vector2i = tile_map.local_to_map(mouse_position)
+		
+		
+		var data = cast_ray(Vector2(mouse_position.x -2, mouse_position.y -2), Vector2(mouse_position.x +2, mouse_position.y +2), "seed")
+		if data and data.collider.get_parent().is_in_group("seeds"):
+			#print(data)
+			return false
+		return true
+	else:
+		return false
+
+func can_cut_tree():
 	var mouse_position :Vector2 = world.get_global_mouse_position()
 	var tile_mouse_pos :Vector2i = tile_map.local_to_map(mouse_position)
 	
-	print(mouse_position)
-	var data = cast_ray(Vector2(mouse_position.x -2, mouse_position.y -2), Vector2(mouse_position.x +2, mouse_position.y +2))
-	if data and data.collider.get_parent().is_in_group("seeds"):
+	#print(mouse_position)
+	var data = cast_ray(Vector2(mouse_position.x -2, mouse_position.y -2), Vector2(mouse_position.x +2, mouse_position.y +2), "tree")
+	if data and data.collider.is_in_group("trees"):
 		print(data)
-		return false
-	return true
-	#print(data)
+		return data.collider
+	return false
+	
+func hit_tree():
+	var collider = can_cut_tree()
+	if collider:
+		collider.hit()
+	
 
 func set_item_in_hand(i):
 	item_in_hand = i
