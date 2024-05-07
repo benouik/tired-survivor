@@ -12,7 +12,7 @@ resource_local_to_scene = true
 atlas = ExtResource("2_la0u7")
 region = Rect2(64, 0, 16, 16)
 
-[node name="InventoryItem" type="Node2D" groups=["ramassable", "seeds"]]
+[node name="InventoryItem" type="Node2D" groups=["inventory_item", "ramassable", "seeds"]]
 position = Vector2(0, 16)
 script = ExtResource("1_do300")
 

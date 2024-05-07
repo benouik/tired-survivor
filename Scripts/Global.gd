@@ -76,7 +76,7 @@ func cast_ray(start, target, mode):
 func can_plant():
 	if not can_cut_tree():
 		var mouse_position :Vector2 = world.get_global_mouse_position()
-		var tile_mouse_pos :Vector2i = tile_map.local_to_map(mouse_position)
+		var _tile_mouse_pos :Vector2i = tile_map.local_to_map(mouse_position)
 		
 		
 		var data = cast_ray(Vector2(mouse_position.x -2, mouse_position.y -2), Vector2(mouse_position.x +2, mouse_position.y +2), "seed")
@@ -89,7 +89,7 @@ func can_plant():
 
 func can_cut_tree():
 	var mouse_position :Vector2 = world.get_global_mouse_position()
-	var tile_mouse_pos :Vector2i = tile_map.local_to_map(mouse_position)
+	var _tile_mouse_pos :Vector2i = tile_map.local_to_map(mouse_position)
 	
 	#print(mouse_position)
 	var data = cast_ray(Vector2(mouse_position.x -2, mouse_position.y -2), Vector2(mouse_position.x +2, mouse_position.y +2), "tree")

@@ -17,6 +17,7 @@ var scene_path: String = "res://Scenes/Inventory_Item.tscn"
 
 
 var id = ""
+var objects_ready = false
 
 # Variables
 var player_in_range = false
@@ -25,20 +26,21 @@ var item: Dictionary
 
 func _ready():
 	
-	
-
 
 	#item_name = ["Fraise", "Melon", "Cerise"].pick_random()
 	#item_effect = ["Sante", "Vitesse", "Energie"].pick_random()
 	#print(Objets.objets)
 	print("item id: " + id)
 	
+	
+	while not objects_ready:
+		await get_tree().create_timer(0.5).timeout
+		
 	for i in range(Objets.objets.size()):
 		#print("id :" + str(id))
 		#print(Objets.objets[i]["id"])
 		if Objets.objets[i]["id"] == id:
 			item = Objets.objets[i]
-		
 	#print("item: " + str(item))
 
 	for group in item["groups"]:
@@ -145,7 +147,7 @@ func _on_area_2d_mouse_exited():
 func _on_area_2d_input_event(_viewport, event, _shape_idx):
 	if event is InputEventMouseButton:
 		var pos = Global.world.to_local(position)
-		print(pos)
+		#print(pos)
 		if self.is_in_group("seeds"):
 			Global.can_plante = false
 			#await get_tree().create_timer(0.3).timeout

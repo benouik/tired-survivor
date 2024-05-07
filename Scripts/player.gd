@@ -171,7 +171,7 @@ func _input(_event):
 			Global.set_item_in_hand(i)
 
 		
-	var item_in_hand = 1
+	var _item_in_hand = 1
 	
 	#if Input.is_action_just_pressed("zoom_in"):
 		#var zoom_val = min($Camera2D.zoom.x + 0.1, max_zoom)

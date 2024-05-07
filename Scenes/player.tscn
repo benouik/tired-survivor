@@ -8,7 +8,7 @@
 [ext_resource type="Shader" path="res://Shaders/ennemi.gdshader" id="4_2v60e"]
 [ext_resource type="Script" path="res://Scripts/RayCast.gd" id="6_nxdht"]
 [ext_resource type="FontFile" uid="uid://bi04iecmbt37l" path="res://Fonts/ARCADECLASSIC.TTF" id="8_p2uvx"]
-[ext_resource type="PackedScene" uid="uid://cyf0p1knbldrj" path="res://Scenes/inventory_ui.tscn" id="9_4q5lt"]
+[ext_resource type="PackedScene" uid="uid://cyf0p1knbldrj" path="res://Scenes/inventory.tscn" id="9_lm7aj"]
 [ext_resource type="PackedScene" uid="uid://cmgn1d74ufrxo" path="res://Scenes/hotbar.tscn" id="10_4op6l"]
 
 [sub_resource type="Gradient" id="Gradient_84xoc"]
@@ -398,7 +398,7 @@ theme_override_fonts/font = ExtResource("8_p2uvx")
 theme_override_font_sizes/font_size = 60
 text = "Inventory"
 
-[node name="Inventory_UI" parent="InventoryUI/ColorRect" instance=ExtResource("9_4q5lt")]
+[node name="Inventory_UI" parent="InventoryUI/ColorRect" instance=ExtResource("9_lm7aj")]
 layout_mode = 1
 
 [node name="Hotbar" type="CanvasLayer" parent="."]

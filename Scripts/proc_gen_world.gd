@@ -260,7 +260,7 @@ func _input(_event):
 		
 	elif Input.is_action_just_pressed("click") and cursor_active and not action_cooldown:
 		
-		var tool_on_hand :int = Global.item_in_hand
+		var _tool_on_hand :int = Global.item_in_hand
 
 		
 		var mouse_pos :Vector2 = get_global_mouse_position()
@@ -317,8 +317,8 @@ func _input(_event):
 						#await get_tree().create_timer(0.1).timeout
 						if Global.can_plant():
 							last_action = "seeds"
-							var seed = object["id"]
-							handle_seed(tile_mouse_pos,seed)
+							var seeds = object["id"]
+							handle_seed(tile_mouse_pos,seeds)
 							Global.update_item_quantity(Global.item_in_hand, -1)
 						else:
 							Global.can_plante = true
@@ -356,13 +356,13 @@ func retrieving_custom_data(tile_mouse_pos, custom_data_layer, layer):
 		return false
 
 
-func handle_seed(tile_mouse_pos, seed):
+func handle_seed(tile_mouse_pos, seeds):
 	if Global.can_plant():
 		#Global.can_plante = false
 		var fruit = fruit_scene.instantiate()
 		
 		#var ids = ["carotte_plant", "weat_plant"]
-		fruit.id = seed  # ids.pick_random()
+		fruit.id = seeds  # ids.pick_random()
 		#fruit.item_name = ["Fraise", "Melon", "Cerise"].pick_random()
 		#fruit.item_effect = ["Sante", "Vitesse", "Energie"].pick_random()
 		fruit.position = Vector2(tile_mouse_pos.x *16+8, tile_mouse_pos.y *16+8)
