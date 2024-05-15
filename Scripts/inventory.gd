@@ -21,7 +21,7 @@ func _on_inventory_updated():
 	
 	# On repeuple les slots de l'inventaire avec les éléments présents dans l'inventaire
 	# (Les premiers slots de l'inventaire sont la hotbar dont on les zappe)
-	for i in range(5, Global.inventory.size()):
+	for i in range(Global.hotbar.size(), Global.inventory.size()):
 		var item = Global.inventory[i]
 		var slot = Global.inventory_slot_scene.instantiate()
 		

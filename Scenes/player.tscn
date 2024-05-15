@@ -8,7 +8,7 @@
 [ext_resource type="Shader" path="res://Shaders/ennemi.gdshader" id="4_2v60e"]
 [ext_resource type="Script" path="res://Scripts/RayCast.gd" id="6_nxdht"]
 [ext_resource type="FontFile" uid="uid://bi04iecmbt37l" path="res://Fonts/ARCADECLASSIC.TTF" id="8_p2uvx"]
-[ext_resource type="PackedScene" uid="uid://cyf0p1knbldrj" path="res://Scenes/inventory.tscn" id="9_lm7aj"]
+[ext_resource type="PackedScene" uid="uid://cyf0p1knbldrj" path="res://Scenes/inventory_ui.tscn" id="9_lm7aj"]
 [ext_resource type="PackedScene" uid="uid://cmgn1d74ufrxo" path="res://Scenes/hotbar.tscn" id="10_4op6l"]
 
 [sub_resource type="Gradient" id="Gradient_84xoc"]

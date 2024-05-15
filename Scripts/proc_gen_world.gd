@@ -127,11 +127,7 @@ func _process(_delta):
 		
 	if cursor_active:
 		tile_map.set_cell(cursor_layer, tile_mouse_pos, 3, cursor_atlas)
-		#var can_dirt = check_ground_layer_custom_data(tile_mouse_pos, can_place_dirt_custom_data)
-		
-		#if int(delta) % 60 == 0:
-			#print("Dirt: ", can_dirt)
-			
+
 		old_cursor_pos = tile_mouse_pos
 		
 	
@@ -202,15 +198,6 @@ func generate_world():
 							player.position = Vector2i(x*16, y*16)
 							add_child(player)
 
-							var fruit = fruit_scene.instantiate()
-							var ids = ["carotte_plant"] # , "weat_plant"]
-							fruit.id = ids.pick_random()
-							fruit.position = Vector2i(x*16 +32, y*16 +32)
-							add_child(fruit)
-							fruit = fruit_scene.instantiate()
-							fruit.id = ids.pick_random()
-							fruit.position = Vector2i(x*16 -32, y*16 -32)
-							add_child(fruit)
 							
 						#tile_map.set_cell(ground_2_layer, Vector2i(x, y), source_id, grass_atlas_arr.pick_random())
 						if flower_noise_value > 0.5:
@@ -253,10 +240,12 @@ func _input(_event):
 		Global.item_in_hand = 1
 		
 	if Input.is_action_just_released("click"):
-		last_action = ""
-		action_cooldown = true
-		await get_tree().create_timer(action_cooldown_time).timeout
-		action_cooldown = false
+		
+		if not action_cooldown:
+			last_action = ""
+			action_cooldown = true
+			await get_tree().create_timer(action_cooldown_time).timeout
+			action_cooldown = false
 		
 	elif Input.is_action_just_pressed("click") and cursor_active and not action_cooldown:
 		
@@ -267,19 +256,6 @@ func _input(_event):
 		var tile_mouse_pos :Vector2i = tile_map.local_to_map(mouse_pos)
 
 		var _interaction_present = tile_map.get_cell_tile_data(interaction_layer, tile_mouse_pos)
-		
-		#if Global.item_to_pickup != Node2D and last_action == "":
-			#Global.item_to_pickup.pickup_item()
-			#last_action = "pick"
-			
-		#elif interaction_layer and retrieving_custom_data(tile_mouse_pos, can_be_cut_custom_data, interaction_layer):
-			#if tile_mouse_pos in damaged_trees.keys():
-				#damaged_trees[tile_mouse_pos] -= 10
-			#else:
-				#damaged_trees[tile_mouse_pos] = 20
-			#if damaged_trees[tile_mouse_pos] <= 0:
-				#tile_map.erase_cell(interaction_layer, tile_mouse_pos)
-				
 
 		if not campement_placed and not interaction_layer:
 			var feu_de_camp = feu_de_camp_scene.instantiate()
@@ -287,12 +263,6 @@ func _input(_event):
 			add_child(feu_de_camp)
 			campement_placed = true
 		
-		#elif not retrieving_custom_data(tile_mouse_pos, growing_custom_data, interaction_layer):
-			
-			#if retrieving_custom_data(tile_mouse_pos, can_recolte_custom_data, interaction_layer):
-				#tile_map.erase_cell(interaction_layer, tile_mouse_pos)
-				#$Player.say("Miam !")
-				
 				
 		var now = Time.get_ticks_msec()
 		
@@ -306,9 +276,9 @@ func _input(_event):
 			
 			if object != null:
 				
-				object = Global.inventory[Global.item_in_hand]["object"]
+				object = Global.inventory[Global.item_in_hand].object
 				
-				if object["use"] == "plant":
+				if object.use == "plant":
 					# On vérifie si il y a une Tile de Dirt
 					var data = tile_map.get_cell_tile_data(dirt_layer, tile_mouse_pos)
 					
@@ -317,31 +287,31 @@ func _input(_event):
 						#await get_tree().create_timer(0.1).timeout
 						if Global.can_plant():
 							last_action = "seeds"
-							var seeds = object["id"]
+							var seeds = object.id
 							handle_seed(tile_mouse_pos,seeds)
 							Global.update_item_quantity(Global.item_in_hand, -1)
 						else:
 							Global.can_plante = true
 						
 						
-				elif object["use"] == "consommer":
+				elif object.use == "consommer":
 					Global.player_node.speed += 100
 					Global.update_item_quantity(Global.item_in_hand, -1)
 					
-				elif object["use"] == "dirt": # farming_mode_state == FARMING_MODES.DIRT and not interaction_present and Global.item_to_pickup == Node2D:
+				elif object.use == "dirt": # farming_mode_state == FARMING_MODES.DIRT and not interaction_present and Global.item_to_pickup == Node2D:
 					#if last_action == "dirt" or last_action == "":
 						#last_action = "dirt"
 						#print("dirt")
 					var data = tile_map.get_cell_tile_data(dirt_layer, tile_mouse_pos)
 					
-					if not data:
+					if not data and not Global.can_cut_tree():
 						if retrieving_custom_data(tile_mouse_pos, can_place_dirt_custom_data, grass_layer):
 							dirt_tiles.append(tile_mouse_pos)
 							#tile_map.erase_cell(grass_layer, tile_mouse_pos)
 							tile_map.set_cells_terrain_connect(dirt_layer, dirt_tiles, 3, 0)
 			#print("Max: ", noise_values.max(), "  Min: ", noise_values.min())
 			
-				elif object["use"] == "cut_tree":
+				elif object.use == "cut_tree":
 					if Global.can_cut_tree():
 						Global.hit_tree()
 						
@@ -361,36 +331,7 @@ func handle_seed(tile_mouse_pos, seeds):
 		#Global.can_plante = false
 		var fruit = fruit_scene.instantiate()
 		
-		#var ids = ["carotte_plant", "weat_plant"]
 		fruit.id = seeds  # ids.pick_random()
-		#fruit.item_name = ["Fraise", "Melon", "Cerise"].pick_random()
-		#fruit.item_effect = ["Sante", "Vitesse", "Energie"].pick_random()
 		fruit.position = Vector2(tile_mouse_pos.x *16+8, tile_mouse_pos.y *16+8)
 		add_child(fruit)
-	#source_id = 2
-	#tile_map.set_cell(interaction_layer, tile_mouse_pos, source_id, atlas_coords[level])
-	#
-	#await get_tree().create_timer(1.0).timeout
-	#
-	#if level == final_seed_level:
-		#tile_map.erase_cell(interaction_layer, tile_mouse_pos)
-		#
-		#var fruit = fruit_scene.instantiate()
-		#fruit.position = Vector2(tile_mouse_pos.x *16+8, tile_mouse_pos.y *16+8)
-		#add_child(fruit)
-		#return
-		#
-	#else:
-		#var new_atlas :Vector2i = Vector2i(atlas_coords[level])
-		#tile_map.set_cell(interaction_layer, tile_mouse_pos, source_id, new_atlas)
-		#handle_seed(tile_mouse_pos, level +1, atlas_coords, final_seed_level)	
 		
-		
-#func normalize_array(array, min_value, max_value):
-	#var new_array = []
-	#var range_value = max_value - min_value
-	#
-	#for value in array:
-		#new_array.append((value - min_value) / range_value)
-		#
-	#return new_array

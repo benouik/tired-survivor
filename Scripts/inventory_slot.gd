@@ -33,29 +33,11 @@ func _on_item_button_mouse_entered():
 		detail_panel.visible = true
 	#print("Mouse entrée")
 
-#func block(item):
-	#if item != self:
-		#blocked = !blocked
-	#
-		#if blocked:
-			#$ItemButton.disabled = true
-			#$ItemButton.visible = false
-		#else:
-			#$ItemButton.disabled = false
-			#$ItemButton.visible = true
-
 # On cache le volet de détails quand la souris ne le survole plus
 func _on_item_button_mouse_exited():
 	if item != null:
 		detail_panel.visible = false
 
-# Si on clique sur le slot on affiche le menu
-func _on_item_button_pressed():
-	if slot_index < 5:
-		Global.set_item_in_hand(slot_index)
-	#if item != null:
-		#usage_panel.visible = !usage_panel.visible
-		#get_tree().call_group("inventory_slots", "block", self)
 
 # Si le slot ne contient pas d'objet, pas d'icone ni d'indication de quantité
 func set_empty():
@@ -63,17 +45,17 @@ func set_empty():
 	quantity_label.text = ""
 	if slot_is_active:
 		outer_border.color = "8625fe"
-		
+
 # On attribue les élements d'interface à partir des valeurs de l'objet
-func set_item(new_item):
-	item = new_item["object"]
-	icon.texture = load(item["icon"])
+func set_item(_item):
+	#icon.texture = load(item["object"]["icon"])
+	icon.texture = load(_item.object.icon)
 	#icon.texture.region = Rect2(64, 16, 16, 16)
-	quantity_label.text = str(new_item["quantity"])
-	item_name.text = str(item["name"])
-	item_type.text = str(item["type"])
-	if item["effect"] != "":
-		item_effect.text = str(item["effect"])
+	quantity_label.text = str(_item.quantity)
+	item_name.text = str(_item.object.name)
+	item_type.text = str(_item.object.type)
+	if _item.object.effect != "":
+		item_effect.text = str(_item.object.effect)
 	else:
 		item_effect.text = ""
 		
@@ -98,3 +80,7 @@ func _on_item_button_gui_input(event):
 			else:
 				outer_border.modulate = Color(1, 1, 1)
 				drag_end.emit()
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			if event.pressed:
+				if slot_index < 5:
+					Global.set_item_in_hand(slot_index)
